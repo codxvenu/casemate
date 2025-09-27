@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&display=swap');
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --purple: #6C63FF;
+  --light_purple: #9292FD;
+  --inputbg : #f3f3f3;
+}
+h1{
+  font-weight: 500;
+  font-size: 24px;
+}
+h3{
+  font-weight: light;
+  font-size: 14px;
+}
+p{
+  font-size: 14px;
+  font-weight: light;
+}
+small{
+  font-size: 13px;
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Montserrat", sans-serif;
+  scrollbar-width: 0px;
+}
+.pulseimg{
+  animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
