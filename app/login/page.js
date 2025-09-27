@@ -23,7 +23,7 @@ const page = () => {
          </label>
         <span className='flex justify-between mt-3 w-[300px]'>
         <label htmlFor="remember" className='flex gap-2'><input type="checkbox" name="remember" id="remember" /><p>Remember Me</p></label>
-        <small className='text-[var(--purple)]'>Forgot Password ?</small>
+        <small className='text-[var(--purple)]'><Link href="/fpass">Forgot Password ?</Link> </small>
         </span>
             </div> 
         <span className='flex flex-col justify-center h-min gap-3'>
