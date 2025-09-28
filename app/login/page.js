@@ -3,8 +3,10 @@ import {React,useState} from 'react'
 import { Mail, Lock, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Loader from '@/components/loader'
 const page = () => {
   const router = useRouter();
+  const [loading,setLoading] = useState(false);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
@@ -12,6 +14,7 @@ const page = () => {
     console.log(email,password);
     
     if(!email || !password) return alert("Please fill all the fields");
+    setLoading(true)
     const res = await fetch('/api/auth/login',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -19,9 +22,11 @@ const page = () => {
     })
     const data = await res.json();
     if(!res.ok){
-      console.log(data.error);
+      setLoading(false)
+      return alert(data.error)
     }
-    router.push('/dashboard');
+      setLoading(false)
+      router.push('/dashboard');
   }
   return (
     <div className='overflow-hidden h-screen flex items-center'>
@@ -48,7 +53,7 @@ const page = () => {
         </span>
             </div> 
         <span className='flex flex-col justify-center h-min gap-3'>
-        <button className='flex w-[300px] h-[50px]  items-center justify-center bg-[var(--purple)] rounded text-[var(--background)]' type="button" onClick={()=>handleLogin()}>Next <ChevronRight /></button>
+        <button className='flex w-[300px] h-[50px]  items-center justify-center bg-[var(--purple)] rounded text-[var(--background)]' type="button" onClick={()=>handleLogin()}> {loading ? <Loader/>:<span className="flex"> Next <ChevronRight /></span>}</button>
         <small className='text-center font-medium'>New Member? <Link href="/register" className='text-[var(--purple)] font-bold'>Register now</Link></small>
             </span>
     </div>

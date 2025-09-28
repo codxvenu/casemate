@@ -6,18 +6,19 @@ export async function POST(req) {
   try {
     const { user } = await req.json();
     if (!user.email || !user.password)
-      return Response.json({ status: 400, error: "Email or Password empty" });
+      return Response.json({  error: "Email or Password empty" },{status: 400});
     
     const [rows] = await db.query("select * from users where email = ? ", [user.email]);
+    console.log(rows);
     if (rows.length === 0) {
-  return Response.json({ status: 400, error: "email or password wrong" });
+  return Response.json({ error: "email or password wrong" },{status: 400,});
 }
     const valid =  await bcrypt.compare(user.password,rows[0].password);
-    if (!valid) return Response.json({ status: 400, error: "email or password wrong" });
+    if (!valid) return Response.json({ error: "email or password wrong" },{status: 400});
     const token = jwt.sign({user:user.email},"helloworld",{expiresIn:"1h"})
     cookies().set("token",token,{httpOnly:true,maxAge:3600});
     return Response.json({ status: 200, message: token });
   } catch (error) {
-    return Response.json({ status: 400, error: error.message });
+    return Response.json({ error: error.message },{status: 400 });
   }
 }
