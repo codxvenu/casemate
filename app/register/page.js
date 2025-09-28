@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Loader from '@/components/loader'
 const page = () => {
+  const router = useRouter();
   const [loading,setLoading] = useState(false);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
@@ -23,11 +24,11 @@ const page = () => {
     })
     const data = await res.json();
     if(!res.ok){
-      return alert(data.error)
       setLoading(false)
+      return alert(data.error)
     }
     setLoading(false)
-    useRouter().push("/dashboard");
+    router.push("/dashboard");
   }
 
   return (
