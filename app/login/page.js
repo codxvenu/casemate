@@ -21,8 +21,7 @@ const page = () => {
     if(!res.ok){
       console.log(data.error);
     }
-    console.log(data.message);
-    // router.push('/dashboard');
+    router.push('/dashboard');
   }
   return (
     <div className='overflow-hidden h-screen flex items-center'>
