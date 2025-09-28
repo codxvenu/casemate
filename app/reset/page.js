@@ -1,6 +1,6 @@
 "use client"
 import {React,useState} from 'react'
-import { Key, Lock, ChevronRight } from 'lucide-react'
+import { Key,Mail, Lock, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 const page = () => {
