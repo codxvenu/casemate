@@ -28,6 +28,9 @@ body {
   font-family: "Montserrat", sans-serif;
   scrollbar-width: 0px;
 }
+html{
+  scrollbar-width: none;
+}
 .pulseimg{
   animation: pulse 1.5s infinite ease-in-out;
 }
@@ -35,4 +38,20 @@ body {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.2); }
   100% { transform: scale(1); }
+}
+
+@keyframes bouncing-loader {
+  to {
+    opacity: 0.1;
+    /* transform: translateY(-5px); */
+  }
+}
+.bounceDot{
+   animation: bouncing-loader 0.6s infinite alternate;
+}
+.bounceDot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+ .bounceDot:nth-child(3) {
+  animation-delay: 0.4s;
 }

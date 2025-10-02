@@ -8,7 +8,7 @@ export async function POST(req) {
       return Response.json({ error: "Email or Password empty" },{status: 400,});
     
     const pass = await bcrypt.hash(user.password,10);
-    console.log(pass);
+    console.log(user.phone);
 
     const [rows] = await db.query("insert into users(name,email,phone,password) values(?,?,?,?)", [user.name,user.email,user.phone,pass]);
     if (rows.length == 0) return Response.json({  error: "email or password wrong" },{status: 400,});

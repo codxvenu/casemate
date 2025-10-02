@@ -1,6 +1,9 @@
 
+import SocketContext from "./context/SocketContext";
+import UserContext from "./context/UserContext";
 import "./globals.css";
 import { Montserrat } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
 
 const montserrat = Montserrat({
   subsets: ['latin'],       // required
@@ -16,9 +19,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} antialiased`}
-      >
+        className={`${montserrat.className} antialiased`}>
+          <SocketContext>
+        <UserContext>
         {children}
+        <ToastContainer/>
+        </UserContext>
+          </SocketContext>
       </body>
     </html>
   );

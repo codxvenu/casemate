@@ -16,7 +16,8 @@ export async function POST(req) {
     const valid =  await bcrypt.compare(user.password,rows[0].password);
     if (!valid) return Response.json({ error: "email or password wrong" },{status: 400});
     const token = jwt.sign({user:user.email},"helloworld",{expiresIn:"1h"})
-    cookies().set("token",token,{httpOnly:true,maxAge:3600});
+    const store = await cookies()
+    store.set("token",token,{httpOnly:true,maxAge:3600});
     return Response.json({ status: 200, message: token });
   } catch (error) {
     return Response.json({ error: error.message },{status: 400 });
