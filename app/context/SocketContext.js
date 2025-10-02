@@ -7,7 +7,7 @@ export const Socket = createContext(null);
 const SocketContext = ({children}) => {
     const [socket,setSocket] = useState(null);
     useEffect(() => {
-        const s = io("http://141.98.157.57:3001");
+        const s = io("http://141.98.157.57:3001",{ transports: ["websocket"] });
         setSocket(s);
         return () => {s.disconnect()}
     }, []);
