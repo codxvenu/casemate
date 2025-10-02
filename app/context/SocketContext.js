@@ -7,7 +7,7 @@ export const Socket = createContext(null);
 const SocketContext = ({children}) => {
     const [socket,setSocket] = useState(null);
     useEffect(() => {
-        const s = io("http://141.98.157.57:3001",{ transports: ["websocket"] });
+        const s = io("https://ws.casemate.icu:3001",{transports: ["websocket", "polling"],path: "/socket.io/"});
         setSocket(s);
         return () => {s.disconnect()}
     }, []);
