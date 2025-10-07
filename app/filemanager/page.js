@@ -30,7 +30,7 @@ const page = () => {
   },[files])
   useEffect(()=> console.log(files),[files])
     async function DownloadFile(file) {
-      const res = await fetch(`http://ws.casemate.icu:3001/download/${user.user?.id}/${file.filename}`,{
+      const res = await fetch(`https://ws.casemate.icu:3001/download/${user.user?.id}/${file.filename}`,{
         credentials : "include"
       })
       const blob = await res.blob();
@@ -40,7 +40,7 @@ const page = () => {
       a.click()
     }
     async function ShareFile(file) {
-      const res = await fetch(`http://ws.casemate.icu:3001/Share/`,{
+      const res = await fetch(`https://ws.casemate.icu:3001/Share/`,{
         method : "POST",
         headers : {"Content-Type"  : "application/json"},
         body : JSON.stringify({file , userId})
@@ -51,7 +51,7 @@ const page = () => {
       
     }
     async function RenameFile(file,filename) {
-      const res = await fetch(`http://ws.casemate.icu:3001/rename`,{
+      const res = await fetch(`https://ws.casemate.icu:3001/rename`,{
         method : "PUT",
         headers : {"Content-Type"  : "application/json"},
         credentials : "include",
@@ -66,7 +66,7 @@ const page = () => {
     async function DeleteFile(file) {
       console.log(file);
       
-      const res = await fetch(`http://ws.casemate.icu:3001/delete/${user.user.id}/${file.filename}`,{
+      const res = await fetch(`https://ws.casemate.icu:3001/delete/${user.user.id}/${file.filename}`,{
         method : "DELETE",
         credentials : "include"
       })
