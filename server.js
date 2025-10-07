@@ -68,9 +68,9 @@ sftpConnection();
 
 
 async function authMiddleware(req,res,next) {
-  console.log(req);
   
   const token = req.cookies?.token;
+  console.log(token);
   if(!token) return res.status(401).json({error : "user not authenticated"})
   try {
     const user = jwt.verify(token,"helloworld");
