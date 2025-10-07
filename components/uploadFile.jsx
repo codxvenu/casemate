@@ -20,7 +20,7 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           console.log(now);
           
           formData.append("time",now)
-          const res = await fetch("http://localhost:3001/upload",{
+          const res = await fetch("http://ws.casemate.icu:3001/upload",{
             method: "POST",
             body : formData,
             credentials :"include"

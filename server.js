@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require("express");
-const http = require("http");
+const http = require("https");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const mysql = require("mysql2");
@@ -10,16 +10,23 @@ const multer = require("multer")
 const fs = require("fs");
 const cookie = require("cookie-parser")
 const jwt = require("jsonwebtoken");
-app.use(cors({ origin: "http://localhost:3000",credentials: true })); // adjust your frontend URL in production
+app.use(cors({ origin: "https://casemate.icu",credentials: true })); // adjust your frontend URL in production
 app.use(cookie())
 app.use(express.json())
-const server = http.createServer(app);
+const sslOptions = {
+  key: fs.readFileSync("/etc/letsencrypt/live/ws.casemate.icu/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/ws.casemate.icu/fullchain.pem"),
+};
+const server = http.createServer(sslOptions,app);
 const genAI = new GoogleGenerativeAI("AIzaSyCE1dbOSUARJBlenNvlEuCINIVQqfuWdOA");
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 const upload = multer({storage: multer.memoryStorage()})
 const io = new Server(server, {
-  cors: { origin: "*" }, // allow frontend to connect
+  cors: { origin: "*" },
+  transports: ["websocket", "polling"],  //  add polling
+  path: "/socket.io/" // allow frontend to connect
 });
+
 let onlineUsers = {}; // userId -> socketId mapping
 const db = mysql
   .createPool({
