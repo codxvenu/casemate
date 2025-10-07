@@ -11,16 +11,25 @@ const page = () => {
   const{socket}=useContext(Socket);
   const [empty,setEmpty] = useState(false);
   const [message, setMessage] = useState("");
-  const[loading , setLoading] = useState(true);
+  const [prevLen, setPrevLen] = useState(0);
+  const[loading , setLoading] = useState(false);
   useEffect(()=>{
     if(!socket || !user) return
     console.log(user,user.id);
-    socket.on("replyDone",({fullReply})=>{
+    socket.on("replyDone",({fullReply,id,edited})=>{
+       if(edited){
+        setChats((prev)=>{
+          const newChat = prev.map((i)=>{
+          return id === i.id ? {role:"assistant",text : fullReply , id} :  i 
+         });
+         return [...newChat]
+        })
+    }else{
       setChats((prev)=>{
         const yes = prev[prev.length - 1].role === "assistant"
         const msg = !yes ? prev : prev.slice(0,-1)
         return [...msg,{role: "assistant", text : fullReply}]
-      })
+      })}
     });
     socket.emit("register", user.id);
     socket.on("history",(history)=>{
@@ -28,14 +37,13 @@ const page = () => {
       setChats(history)
     });
     socket.on("replyChunk",({text})=>{
-      console.log(text);
-      setChats((prev)=>{
-        if(prev[prev.length - 1]){
-          return [...prev.slice(0,-1),{...prev[prev.length - 1],completed : false,text : prev[prev.length - 1].text !== "loading" ? prev[prev.length - 1].text + text : text}]
-        }else{
-          return [...prev,{role : "assistant" , text : prev[prev.length - 1].text !== "loading" ? prev[prev.length - 1].text + text : text}]
-        }
-      });
+        setChats((prev)=>{
+          if(prev[prev.length - 1]){
+            return [...prev.slice(0,-1),{...prev[prev.length - 1],completed : false,text : prev[prev.length - 1].text !== "loading" ? prev[prev.length - 1].text + text : text}]
+          }else{
+            return [...prev,{role : "assistant" , text : prev[prev.length - 1].text !== "loading" ? prev[prev.length - 1].text + text : text}]
+          }
+        });
     });
     socket.on("error",({error})=>{
       setChats((prev)=>{
@@ -44,11 +52,13 @@ const page = () => {
     });
   },[socket,user]);
   useEffect(()=>{
-   window.scrollTo({
-  top: document.body.scrollHeight,
-  behavior: "smooth"  // smooth animation
-});
-console.log(chat);
+    if(prevLen !== chat.length){
+      window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"  // smooth animation
+    });
+    }
+    setPrevLen(chat.length);
 
     
   },[chat])
@@ -67,7 +77,7 @@ console.log(chat);
       
     socket.emit("chatMessage",{userId: user.id, message: message,created_at : now });
     setMessage("");
-    //document.getElementById("sendtxt").innerText = ""
+    document.getElementById("sendtxt").innerText = ""
     setEmpty("false");
   }
   function sendFn(m){
@@ -89,33 +99,33 @@ console.log(chat);
       
         
         
-        <div className='w-full bg-white fixed top-0 py-4 flex justify-center'>
+        <div className='w-full bg-white fixed top-0 py-4 flex justify-center z-50'>
 
       <span className='flex justify-between items-center w-[85%]'>
         <button className='p-2 shadow-[5.92px_11.84px_23.68px_rgba(211,209,216,0.3)] rounded-[10px] flex items-center'> <ChevronLeft /></button>
        
-        <h1>Welcome to CaseBot!</h1>
+        <h1 className="!text-[22px]"></h1>
         <Ellipsis className="text-[#CBCCCD]" />
       </span>
         </div>
         {chat.length === 0 && <div className="mt-[56px] mb-[6rem] px-2 w-[100%]">
            <div className="flex flex-col items-center justify-center h-full text-center p-6 space-y-6">
       {/* Welcome Message */}
-      <p className="text-lg text-gray-600 max-w-md">
-        CaseBot can help you summarize documents, research cases, or answer your questions instantly.
-      </p>
- <div className="mt-8 w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-2">What others are asking:</h2>
+      <h1 className=" text-gray-600 max-w-md font-bold">
+        CaseBot 
+      </h1>
+ <div className="mt-8 w-full h-full items-center max-w-md text-[#A0A0A5]">
         <ul className="space-y-2">
           {[
-            "Summarize a contract for me",
-            "Research recent IP cases",
-            "Explain my last case notes",
+  "Draft client communication (emails, memos)",
+  "Summarize witness statements",
+  "Translate legal jargon into plain English",
+  "Generate legal arguments based on facts"
           ].map((chat, idx) => (
             <li
               key={idx}
               onClick={()=>{sendFn(chat)}}
-              className="p-3 border rounded-lg hover:bg-gray-100 cursor-pointer"
+              className=" rounded-lg bg-[#F7F7F8] text-[14px] cursor-pointer p-[18px]"
             >
               {chat}
             </li>
@@ -130,14 +140,28 @@ console.log(chat);
       <div className='chatroom mt-[56px] mb-[6rem] px-2 w-[100%]'>
 {chat.map((m,i)=>(
   m.role === "assistant" ? (
-    <Bot key={i} text={m.error ? m.error : m.text} error={!!m.error} />
+    <Bot key={i} id={m.id} text={m.error ? m.error : m.text} error={!!m.error}  />
   ) : (
-    <Message key={i} img={"image.png"} text={m.text}/>
+    <Message key={i} id={m.id} Onedit={({id,message})=>{
+      setChats((prev)=>{
+        const newChat = prev.map((i)=>{
+         if(id === i.id){
+           return {role:"user",text : message,id}
+          }else if(id+1 === i.id){
+           return {role:"assistant",text : "loading",id : id+1}
+         }else{
+          return i
+         }
+        });
+        return [...newChat]
+      })
+      socket.emit("edit-message",{id,message,userId: user.id});
+    }} img={"image.png"} text={m.text}/>
   ) 
 ))}
 
       </div>}
-       <div className='w-[90%] flex items-end justify-center gap-3 fixed bottom-0 py-3 bg-[var(--background)]'>
+       <div className='w-[100%] px-4 flex items-end justify-center gap-3 fixed bottom-0 py-3 bg-[var(--background)]'>
         <button className='w-[45px] h-[45px] bg-black text-white shrink-0 flex items-center justify-center rounded-2xl'>
         <img src="mic.svg" alt="" />
 </button>

@@ -28,7 +28,7 @@ const page = () => {
       return alert(data.error)
     }
     setLoading(false)
-    router.push("/chatbot");
+    router.push("/login");
   }
 
   return (
