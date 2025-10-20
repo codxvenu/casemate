@@ -68,7 +68,7 @@ const page = () => {
   function sendMessage(){
     if(!socket || !user) return
     const now = new Date();
-    console.log(message);
+    if(message.replace(" ","") === "" || !message) return 
     
     setChats((prev)=>{
         return [...prev,{role: "user", text : message},{role : "assistant" , text : "loading",completed : false}]

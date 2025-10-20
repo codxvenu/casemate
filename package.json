@@ -8,7 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@google/genai": "^1.25.0",
     "@google/generative-ai": "^0.24.1",
+    "@langchain/community": "^1.0.0",
+    "@langchain/core": "^1.0.1",
+    "@langchain/google-genai": "^1.0.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -16,18 +20,21 @@
     "formidable-serverless": "^1.1.1",
     "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
+    "langchain": "^1.0.1",
     "lucide-react": "^0.544.0",
     "multer": "^2.0.2",
     "mysql2": "^3.15.1",
     "next": "15.5.4",
     "nodemailer": "^7.0.6",
+    "pdf-parse": "^1.1.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "react-toastify": "^11.0.5",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
-    "ssh2-sftp-client": "^12.0.1"
+    "ssh2-sftp-client": "^12.0.1",
+    "word-extractor": "^1.0.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

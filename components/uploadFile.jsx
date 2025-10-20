@@ -20,7 +20,7 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           console.log(now);
           
           formData.append("time",now)
-          const res = await fetch("https://ws.casemate.icu:3001/upload",{
+          const res = await fetch(`${process.env.BACKEND_URL}/upload`,{
             method: "POST",
             body : formData,
             credentials :"include"
@@ -28,7 +28,12 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           console.log(upload);
           
           const data = await res.json();
-          if(!res.ok){ setLoading(false); setDragging(false); setUploadShow(false); return console.log(data.error) }
+          if(!res.ok){ 
+            setLoading(false); 
+            setDragging(false); 
+            setUploadShow(false); 
+            console.log(data.error) 
+          }
           await handleFiles()
           setLoading(false)
           setDragging(false)

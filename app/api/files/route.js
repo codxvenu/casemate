@@ -9,7 +9,7 @@ export async function GET(req) {
     if(!id) return Response.json({error : "User not authenticated"},{status : 400});
     console.log(id);
     const [rows] = await db.query("select * from files where userId = ?",[id]);
-    if(rows.length == 0) return Response.json({error : "no file found"},{status : 400})
+    if(rows.length == 0) return Response.json({error : "no file found"},{status : 200})
         console.log(rows);
         
     return Response.json({files : rows},{status : 200})
