@@ -20,7 +20,7 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           console.log(now);
           
           formData.append("time",now)
-          const res = await fetch(`${process.env.BACKEND_URL}/upload`,{
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`,{
             method: "POST",
             body : formData,
             credentials :"include"

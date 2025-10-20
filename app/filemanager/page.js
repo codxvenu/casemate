@@ -49,7 +49,7 @@ const page = () => {
   useEffect(()=> console.log(files),[files])
     async function DownloadFile(file) {
       setLoading(true)
-      const res = await fetch(`${process.env.BACKEND_URL}/download/${user.user?.id}/${file.filename}`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/download/${user.user?.id}/${file.filename}`,{
         credentials : "include"
       })
       const blob = await res.blob();
@@ -62,7 +62,7 @@ const page = () => {
     }
     async function ShareFile(file) {
       setLoading(true)
-      const res = await fetch(`${process.env.BACKEND_URL}/Share/`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Share/`,{
         method : "POST",
         headers : {"Content-Type"  : "application/json"},
         body : JSON.stringify({file , userId : user.user?.id})
@@ -74,7 +74,7 @@ const page = () => {
     }
     async function RenameFile(file,filename) {
       setLoading(true)
-      const res = await fetch(`${process.env.BACKEND_URL}/rename`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/rename`,{
         method : "PUT",
         headers : {"Content-Type"  : "application/json"},
         credentials : "include",
@@ -90,7 +90,7 @@ const page = () => {
     }
     async function DeleteFile(file) {
       setLoading(true)
-      const res = await fetch(`${process.env.BACKEND_URL}/delete/${user.user.id}/${file.filename}`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delete/${user.user.id}/${file.filename}`,{
         method : "DELETE",
         credentials : "include"
       })
