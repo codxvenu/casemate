@@ -5,7 +5,7 @@ const details = ({onClose,close,handleSize,formatDate,handleFileType}) => {
   
   return (
     <div className='fixed top-0 backdrop-blur-sm w-screen h-screen'>
-    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white max-[768px]:w-[80vw] max-[1064px]:w-[50vw] w-[30vw] h-fit rounded-2xl shadow-2xl'>
+    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] max-[768px]:w-[80vw] max-[1064px]:w-[50vw] w-[30vw] h-fit rounded-2xl shadow-2xl'>
       <span className='flex justify-between p-4 border-b-[1px] border-gray-300'>
         <h1 className='!text-[18px]'>Details</h1>
     <X onClick={()=>onClose(false)} />

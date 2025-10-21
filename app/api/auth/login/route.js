@@ -17,6 +17,8 @@ export async function POST(req) {
     if (!valid) return Response.json({ error: "email or password wrong" },{status: 400});
     const token = jwt.sign({user:user.email,id : rows[0].id},"helloworld",{expiresIn:"1h"})
     const store = await cookies()
+    // store.set("token",token,{
+    // maxAge: 3600});
     store.set("token",token,{httpOnly: true,
     secure: true,
     sameSite: "None",

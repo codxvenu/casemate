@@ -179,7 +179,7 @@ if(!socket || !user) return console.log("failed");
       }
 
       <div className='w-[90%] flex items-end justify-center gap-3 fixed bottom-0 py-3 bg-[var(--background)]'>
-        <button className='w-[45px] h-[45px] bg-black text-white shrink-0 flex items-center justify-center rounded-2xl'>
+        <button className='w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl'>
         <img src="mic.svg" alt="" />
 </button>
 <label htmlFor="message" className='flex items-end p-4 shadow-2xl rounded-2xl w-full relative'>

@@ -75,17 +75,17 @@ async function handleShare(id){
               {copied ? (
               <span className='relative group/clip'>
             <Check  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
-            <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-white -translate-x-1/2 translate-y-1/2'>Copied</small>
+            <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Copied</small>
               </span>
               ):
                <span className='relative group/clip'>
             <Clipboard  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
-            <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-white -translate-x-1/2 translate-y-1/2'>Copy</small>
+            <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Copy</small>
               </span>
               }
  <span className='relative group/share flex'>
             <Share2  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>setShowLink(!showlink)} />
-            <small className='absolute top-1/2 group-hover/share:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-white -translate-x-1/2 translate-y-1/2'>Share</small>
+            <small className='absolute top-1/2 group-hover/share:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Share</small>
 {showlink && <ul>
   {shareOptions.map((i,index)=>(
   <li key={index} onClick={()=>handleShare(index)}>{i.app}</li>

@@ -41,9 +41,9 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
       }
   return (
     <div className='fixed top-0 backdrop-blur-md w-screen h-screen flex flex-col items-center justify-center bg-gray-100'>
-    <div onDrop={(e)=>{e.preventDefault(); handleUpload(e.dataTransfer.files[0])}} onDragOver={(e)=>{e.preventDefault(); setDragging(true)}}  className={`${isDragging && "opacity-65"} bg-[var(--background)] relative flex flex-col items-center justify-center py-6 px-2 gap-4 border-2 border-gray-400 border-dashed max-[500px]:w-[90%] max-[768px]:w-[480px] w-[60vw] min-h-[300px]`}>
+    <div onDrop={(e)=>{e.preventDefault(); handleUpload(e.dataTransfer.files[0])}} onDragOver={(e)=>{e.preventDefault(); setDragging(true)}}  className={`${isDragging && "opacity-65"} bg-[var(--foreground)] relative flex flex-col items-center justify-center py-6 px-2 gap-4 border-2 border-gray-400 border-dashed max-[500px]:w-[90%] max-[768px]:w-[480px] w-[60vw] min-h-[300px]`}>
     {loading && <Loader className="absolute top-1/2 left-1/2" />}  
-      <Upload className='text-gray-400 w-8 h-8'/>
+      <Upload className='text-[var(--fileText)] w-8 h-8'/>
       <span className='flex flex-col gap-2 items-center'>
       <h1 className='text-[22px] max-[500px]:!text-[18px]'>Upload files or Create Directory</h1>
       <h2 className='text-[16px] max-[500px]:text-[14px]'> Drag and drop files here , or click to select files</h2>

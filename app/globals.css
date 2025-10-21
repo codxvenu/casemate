@@ -1,11 +1,38 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&display=swap');
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.dark {
+  --foreground: #121212;
   --purple: #6C63FF;
   --light_purple: #9292FD;
   --inputbg : #f3f3f3;
+  --background: black;
+  --fileBox : #161616;
+  --fileText : #8b8b8b;
+    --text: white;
+    --svgtxt: white;
+    --accent: #18181b;
+    --shadow: 0 2px 16px 0 #000000b3;
+    --radius: 8px;
+    --label: oklch(38% 0 0);
+    --border-color: #222;
+    --text_input: #fafafa;
+    --purple: #6c63ff;
+    --light_purple: #9292fd;
+}
+.light {
+    --label: whitesmoke;
+    --background: #fafafa;
+    --foreground: white;
+    --fileBox : #FAFAFA;
+    --text: #131313;
+    --accent: white;
+    --svgtxt: white;
+    --border-table: #e5e5e5;
+    --text_input: #1d1d1d6c;
+    --border-color: #dedede;
+    --fileText : #8b8b8b;
+    --purple: #6c63ff;
+    --light_purple: #9292fd;
 }
 h1{
   font-weight: 500;
@@ -24,7 +51,7 @@ small{
 }
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--text);
   font-family: "Montserrat", sans-serif;
   scrollbar-width: 0px;
 }
@@ -46,6 +73,20 @@ html{
     opacity: 0.1;
     /* transform: translateY(-5px); */
   }
+}
+.growWidth {
+  animation: widthGrow 0.5s ease-in-out forwards;
+}
+.shrinkWidth {
+  animation: widthShrink 0.5s ease-in-out forwards;
+}
+@keyframes widthGrow {
+  from { width: 60px; }
+  to { width: 250px; }
+}
+@keyframes widthShrink {
+  from { width: 250px; }
+  to { width: 60px; }
 }
 .bounceDot{
    animation: bouncing-loader 0.6s infinite alternate;

@@ -33,12 +33,12 @@ const Message = ({img,text,Onedit,id}) => {
             {!edit && 
             <span className='relative group/edit'>
         <SquarePen className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>setEdit(!edit)} />
-        <small className='absolute top-1/2 group-hover/edit:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-white -translate-x-1/2 translate-y-1/2'>Edit</small>    
+        <small className='absolute top-1/2 group-hover/edit:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Edit</small>    
             </span>
             }
 {edit && 
             <span className='flex text-[11px] absolute -bottom-2 right-5 w-[100%] justify-end gap-[10px]'>
-              <button className='border-[1px] border-[#BBBBBB] bg-black text-white px-4 py-1' onClick={handleSave}>Save</button>
+              <button className='border-[1px] border-[#BBBBBB] bg-black text-[var(--text)] px-4 py-1' onClick={handleSave}>Save</button>
               <button className='border-[1px] border-[#BBBBBB] px-3 py-2' onClick={handleCancel}>Cancel</button>
             </span>
 }

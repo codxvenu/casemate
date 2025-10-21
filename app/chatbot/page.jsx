@@ -92,6 +92,7 @@ const page = () => {
   }
   return (
     <>
+    
     {loading ? 
     <>loading</>
     :
@@ -99,7 +100,7 @@ const page = () => {
       
         
         
-        <div className='w-full bg-white fixed top-0 py-4 flex justify-center z-50'>
+        <div className='w-full bg-[var(--background)] fixed top-0 py-4 flex justify-center z-50'>
 
       <span className='flex justify-between items-center w-[85%]'>
         <button className='p-2 shadow-[5.92px_11.84px_23.68px_rgba(211,209,216,0.3)] rounded-[10px] flex items-center'> <ChevronLeft /></button>
@@ -162,7 +163,7 @@ const page = () => {
 
       </div>}
        <div className='w-[100%] px-4 flex items-end justify-center gap-3 fixed bottom-0 py-3 bg-[var(--background)]'>
-        <button className='w-[45px] h-[45px] bg-black text-white shrink-0 flex items-center justify-center rounded-2xl'>
+        <button className='w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl'>
         <img src="mic.svg" alt="" />
 </button>
 
