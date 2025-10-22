@@ -60,7 +60,7 @@ async function handleShare(id){
       {text && (
         
 
-        <div className={`${error && "text-red-900 font-medium"} flex flex-col  justify-between w-[100%] gap-3 p-5 bg-[#F7F7F8] text-[13px] `}>
+        <div className={`${error && "text-red-900 font-medium"} flex flex-col  justify-between w-[100%] gap-3 p-5 bg-[var(--fileBox)] text-[13px] `}>
             <span className='flex items-center justify-between'>
     
       <Image
@@ -74,17 +74,17 @@ async function handleShare(id){
             <span className='flex gap-3 '>
               {copied ? (
               <span className='relative group/clip'>
-            <Check  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
+            <Check  className="text-[var(--fileText)] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
             <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Copied</small>
               </span>
               ):
                <span className='relative group/clip'>
-            <Clipboard  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
+            <Clipboard  className="text-[var(--fileText)] w-[14px] h-[14px]" onClick={()=>copyToClipboard(text)} />
             <small className='absolute top-1/2 group-hover/clip:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Copy</small>
               </span>
               }
  <span className='relative group/share flex'>
-            <Share2  className="text-[#BDBDBD] w-[14px] h-[14px]" onClick={()=>setShowLink(!showlink)} />
+            <Share2  className="text-[var(--fileText)] w-[14px] h-[14px]" onClick={()=>setShowLink(!showlink)} />
             <small className='absolute top-1/2 group-hover/share:block hidden bg-[#000000c9] p-[5px_10px] rounded-[5px] left-1/2 !text-[11px] text-[var(--text)] -translate-x-1/2 translate-y-1/2'>Share</small>
 {showlink && <ul>
   {shareOptions.map((i,index)=>(
@@ -96,9 +96,9 @@ async function handleShare(id){
             </span>
             </span>
             {text === "loading" ? <div className="flex space-x-1">
-  <span className="w-2 h-2 bg-gray-600 rounded-full bounceDot"></span>
-  <span className="w-2 h-2 bg-gray-600 rounded-full bounceDot"></span>
-  <span className="w-2 h-2 bg-gray-600 rounded-full bounceDot"></span>
+  <span className="w-2 h-2 bg-[var(--fileText)] rounded-full bounceDot"></span>
+  <span className="w-2 h-2 bg-[var(--fileText)] rounded-full bounceDot"></span>
+  <span className="w-2 h-2 bg-[var(--fileText)] rounded-full bounceDot"></span>
 </div> : 
             
             <ReactMarkdown >{text}</ReactMarkdown>

@@ -14,13 +14,13 @@ const SideBar = ({className,showBar,setShowBar}) => {
   return (
 <div className={`${!showBar && "max-[768px]:hidden"}`}>
 
-    <div className={className+` ${inter.className}  max-[768px]:fixed top-0 z-[10000] bg-[var(--foreground)] h-screen w-[250px] p-2 grid grid-rows-[1fr_8fr]  shadow shrink-0`}>
+    <div className={className+` ${inter.className}  max-[768px]:fixed top-0 z-[10000] bg-[var(--foreground)] h-screen w-[250px] p-2 grid grid-rows-[1fr_8fr] shrink-0 `}>
         <div className='flex justify-between items-center gap-2 p-1 rounded-md h-min '>
       <span className='flex justify-between items-center gap-3 py-1 rounded-md h-min !text-[14px] text-[var(--text)]'>
         <button className='p-2 bg-blue-600 shadow rounded-md text-[var(--svgtxt)]'>
             <Folder className='w-5 h-5' />
         </button>
-       <p className='[.iconOnly_&]:hidden'>FileVault <br /> <small className='!text-[12px]'>Manage files
+       <p className='[.iconOnly_&]:hidden'>FileVault <br /> <small className='!text-[12px] whitespace-nowrap'>Manage files
         </small>
         </p> 
 

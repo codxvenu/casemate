@@ -1,6 +1,6 @@
 "use client"
 import {React,useContext,useEffect,useState} from 'react'
-import { Upload,FolderPlus } from 'lucide-react'
+import { Upload,FolderPlus,X } from 'lucide-react'
 import { User } from '@/app/context/UserContext';
 import Loader from './loader';
 const UploadFile = ({setUploadShow,handleFiles}) => {
@@ -40,7 +40,8 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           setUploadShow(false);
       }
   return (
-    <div className='fixed top-0 backdrop-blur-md w-screen h-screen flex flex-col items-center justify-center bg-gray-100'>
+    <div className='fixed top-0 backdrop-blur-md w-full left-0 h-screen flex flex-col items-center justify-center bg-[var(--foreground)]'>
+      <X className='absolute top-4 right-4' onClick={()=>setUploadShow(false)}/>
     <div onDrop={(e)=>{e.preventDefault(); handleUpload(e.dataTransfer.files[0])}} onDragOver={(e)=>{e.preventDefault(); setDragging(true)}}  className={`${isDragging && "opacity-65"} bg-[var(--foreground)] relative flex flex-col items-center justify-center py-6 px-2 gap-4 border-2 border-gray-400 border-dashed max-[500px]:w-[90%] max-[768px]:w-[480px] w-[60vw] min-h-[300px]`}>
     {loading && <Loader className="absolute top-1/2 left-1/2" />}  
       <Upload className='text-[var(--fileText)] w-8 h-8'/>

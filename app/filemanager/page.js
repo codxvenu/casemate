@@ -170,17 +170,17 @@ const page = () => {
           <input type="text" name='search' placeholder='Search files and folders...' className='outline-0' onChange={(e)=>{setAllFiles(files.filter(f =>
   f.filename.toLowerCase().includes(e.target.value.toLowerCase())))}}/>
         </label>
-        <span className='flex gap-4 items-center justify-end h-[40px]   w-full'>
+        <span className='flex gap-4 max-[805px]:gap-1 items-center justify-end h-[40px] w-full'>
          
-        <a className='flex items-center p-1 rounded-[5px] bg-[var(--foreground)] max-[400px]:hidden'>
+        <a className='flex items-center p-1 rounded-[5px] bg-[var(--foreground)] max-[500px]:hidden'>
           <button onClick={()=>setView(true)} className={`${view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><Grid className="w-4 h-4" /></button>
           <button onClick={()=>setView(false)} className={`${!view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><List className="w-4 h-4" /></button>
           </a>
         <span onClick={()=>setShowSort(!showSort)} className='flex items-center relative  gap-2 bg-[var(--foreground)] px-3 py-1 rounded h-full max-[768px]:hidden '>
       <ArrowUpDown className="w-4 h-4 text-[var(--fileText)]" />
-      <h2 className='!font-medium max-[830px]:hidden max-[]'>Sort by </h2>
+      <h2 className={`${!iconOnly && "max-[960px]:hidden"} !font-medium max-[830px]:hidden whitespace-nowrap`}>Sort by </h2>
      <span className='flex gap-3 justify-between items-center text-[var(--fileText)]'>
-      <h4 className='max-[830px]:hidden'>{sortName} </h4>
+      <h4 className={`${!iconOnly && "max-[900px]:hidden"} max-[830px]:hidden`}>{sortName} </h4>
       <ChevronDown className='w-5 h-5 text-[var(--text)] max-[830px]:hidden' />
      </span>
        {showSort && 
