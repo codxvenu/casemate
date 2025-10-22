@@ -134,9 +134,9 @@ const page = () => {
           <SideBar
             showBar={showBar}
             setShowBar={setShowBar}
-            className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
+            className={`${iconOnly ? "iconOnly min-[768px]:shrinkWidth" : " min-[768px]:growWidth"}`}
           />
-          <div className="grid grid-rows-[1fr_10fr_1fr] w-full overflow-hidden bg-[var(--foreground)] h-screen">
+          <div className="grid grid-rows-[1fr_10fr] w-full overflow-hidden bg-[var(--foreground)] h-screen relative">
             <div className=" p-4 flex justify-between z-50 rounded w-full">
               <button
                 className="p-2 px-3 bg-[var(--fileBox)] mr-2 max-[768px]:hidden"
@@ -227,14 +227,14 @@ const page = () => {
                 )}
               </div>
             )}
-            <div className="w-full px-4 flex items-end justify-center gap-3 py-3 bg-[var(--foreground)] max-w-[800px] mx-auto">
-              <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
+            <div className="w-full px-4 flex items-end justify-center gap-3 py-3 bg-transparent max-w-[800px] absolute bottom-0 left-1/2 -translate-x-1/2">
+              {/* <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
                 <img src="mic.svg" alt="" />
-              </button>
+              </button> */}
 
               <label
                 htmlFor="message"
-                className="flex items-end p-4 shadow-2xl rounded-2xl w-full relative bg-[var(--fileBox)]"
+                className="flex items-end min-[768px]:p-4 p-2 shadow-2xl rounded-2xl w-full relative bg-[var(--fileBox)]"
               >
                 <div
                   contentEditable="true"
@@ -251,7 +251,7 @@ const page = () => {
                       : setEmpty(true);
                     setMessage(e.target.innerText);
                   }}
-                  className="w-full outline-none peer"
+                  className="max-w-[96%] w-full outline-none peer"
                 ></div>
                 <small
                   className={`absolute ${
