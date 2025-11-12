@@ -2,11 +2,12 @@
 import SideBar from "@/components/sideBar";
 import Stat from "@/components/stat";
 import { Columns2, DoorOpen, EllipsisVertical,Bell,Trash2, ChevronRight, ChevronLeft, Plus } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 
 import { inter, montserrat } from "../layout";
 import Loader from "@/components/loader";
+import { User } from "../context/UserContext";
 const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
@@ -21,6 +22,7 @@ const page = () => {
   const [notice,setNotice] = useState([]);
   const [formData,setformData] = useState({});
   const [showActions,setShowActions] = useState(false);
+  const {user} = useContext(User)
   useEffect(()=>{
     const date = new Date();
     const dateArray = {
@@ -29,8 +31,6 @@ const page = () => {
       "year" : date.getFullYear()
     }
     setSearchDate(dateArray);
-    
-    console.log(dateArray);
     handleStats()
 const stat = [
     { title: "Total users", description: "Users",iconTrue:true },
@@ -175,7 +175,6 @@ function handleDec(){
 function handleInc(){
   setCurrentNote([])
   setSearchDate((prev)=>{
-    console.log(months[Number(prev?.month?.id) + 1],prev?.month?.id);
     return prev?.month?.id === 12 ?  {...prev,month : months[0],"year" : prev.year + 1} : {...prev,month : months[prev?.month?.id]}
   })
 }
@@ -202,14 +201,10 @@ async function handleAddnotice(){
     body : JSON.stringify({formData})
   });
   const data = res.json();
-  if(req.ok) return alert(data.error);
-  console.log("note added");
-  
+  if(req.ok) return alert(data.error);  
 }
 function ConvertDate(date){
   var date = new Date(date);
-  console.log({"day" : date.getDate() ,"month" : date.getMonth(),"year" : date.getFullYear()},date);
-  
   return {"day" : date.getDate() ,"month" : date.getMonth()+1,"year" : date.getFullYear()}
 }
 function ConvertTime(time){
@@ -253,7 +248,7 @@ function ConvertTime(time){
          <div className="p-2 bg-[var(--fileBox)] min-[1024px]:hidden">
           <div  className="p-2 bg-[var(--foreground)] flex justify-between items-center relative">
             <span>
-           <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium">Nitesh</span>  
+           <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium">{user.name.split(" ")[0]}</span>  
             </span>
            <EllipsisVertical className="w-5 h-5" onClick={()=>setShowActions(!showActions)} />
            {showActions && 
@@ -312,7 +307,7 @@ function ConvertTime(time){
             </div>
            
               <div className="max-[600px]:col-span-3 max-[768px]:col-span-2 max-[768px]:row-span-2 row-span-1 col-span-3 bg-[var(--fileBox)] relative">
-            <div className=" bg-[var(--foreground)] min-h-[130px] h-[100%] rounded max-[600px]:flex flex-col grid grid-cols-2">
+            <div className="max-[600px]:bg-[var(--fileBox)] bg-[var(--foreground)]  max-[600px]:gap-2.5 min-h-[130px] h-[100%] rounded max-[600px]:flex flex-col grid grid-cols-2">
               <div className="overflow-y-scroll max-[600px]:h-[138px] max-[768px]:h-[274px] h-[138px] scrollbtn" style={{scrollbarWidth : "none"}}>
              <ul className={`${inter.className} bg-[var(--fileBox)] flex flex-col gap-2  h-fit `} >
             {notice?.filter((i)=>ConvertDate(i.fortime).day === SearchDate.day && ConvertDate(i.fortime).month === SearchDate.month.id && ConvertDate(i.fortime).year === SearchDate.year)
@@ -325,7 +320,7 @@ function ConvertTime(time){
                </ul>
             {notice.filter((i)=>ConvertDate(i.fortime).day === SearchDate.day && ConvertDate(i.fortime).month === SearchDate.month.id && ConvertDate(i.fortime).year === SearchDate.year).length ===0 && <h3 className="flex items-center justify-center p-12 text-[14px]">no notes </h3>}
               </div>
-             <div className={`text-center align-middle flex items-center justify-start p-3 ${montserrat.className}`}>
+             <div className={`bg-[var(--foreground)] text-center align-middle flex items-center justify-start p-3 ${montserrat.className}`}>
               {currentNote.length === 0 ? 
               "No note selected"
               : 
@@ -371,7 +366,7 @@ function ConvertTime(time){
               <div className="overflow-y-scroll  max-h-[290px] bg-[var(--foreground)] h-full p-2" style={{scrollbarWidth : "none"}}>
 
           <>
-          <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium">Nitesh</span>  
+          <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium whitespace-nowrap overflow-ellipsis">{user.name}</span>  
           </>  
            <br /><span className="text-[15px] font-normal">
             You last updated a case 2 hours ago. You have 1 appointment today

@@ -39,17 +39,12 @@ const page = () => {
     if(sortName==="Name")  setAllFiles([...allFiles].sort((a, b) => a.filename.localeCompare(b.filename)));
     if(sortName==="Modified")  setAllFiles([...allFiles].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
     if(sortName==="Size")  setAllFiles([...allFiles].sort((a, b) => a.size - b.size ));
-    console.log(allFiles);
-    
     setShowSort(false);
   },[sortName])
   useEffect(()=>{
     if(!files) return setAllFiles([])
     setAllFiles(files)
-    console.log(!!files);
-  
   },[files])
-  useEffect(()=> console.log(files),[files])
     async function DownloadFile(file) {
       setLoading(true)
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/download/${user.user?.id}/${file.filename}`,{
@@ -72,7 +67,6 @@ const page = () => {
       })
       const data = await res.json();
       if(!res.ok) return setLoading(false); console.log(data.error);
-      console.log(`Access Given to ${data.user}`);
       setLoading(false)
     }
     async function RenameFile(file,filename) {
@@ -85,7 +79,6 @@ const page = () => {
       })
       const data = await res.json();
       if(!res.ok) return setLoading(false); console.log(data.error);
-      console.log("renamed");
       setLoading(false)
       handleFiles()
       
