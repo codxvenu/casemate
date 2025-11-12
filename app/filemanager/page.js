@@ -156,17 +156,17 @@ const page = () => {
   { name: "Delete", icon: Trash2,fn : (i)=>DeleteFile(i)}];
   return (
    <div className='flex'>
-   <SideBar showBar={showBar} setShowBar={setShowBar} className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`} />
+   <SideBar atab={1} showBar={showBar} setShowBar={setShowBar} className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`} />
     <div className={`${allFiles && "overflow-hidden h-screen"} bg-[var(--foreground)] w-screen min-h-screen h-fit flex flex-col`}>
-      <div className=' flex justify--between px-4 py-4 bg-[var(--fileBox)] mx-4 rounded mt-3 mb-2'>
+      <div className=' flex justify--between min-[425px]:px-4 py-4 bg-[var(--fileBox)] max-[425px]:mx-2 min-[425px]:mx-4 rounded mt-3 mb-2'>
       <button className='p-2 px-3 bg-[var(--foreground)] mr-2 max-[768px]:hidden' onClick={()=>setIconOnly(!iconOnly)}>
        <Columns2 className="w-4 h-4"  />
       </button>
       <button className='p-2 px-3 bg-[var(--foreground)] mr-2 min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}>
        <Columns2 className="w-4 h-4"  />
       </button>
-        <label className=' min-[768px]:w-[40%] w-[50%] max-[400px]:!w-[220px] min-[400px]:min-w-[250px] h-[40px] flex items-center gap-3 p-2 bg-[var(--foreground)]  rounded placeholder:text-[var(--text)] placeholder:font-medium'>
-          <Search className='w-4 h-4 text-[var(--text)] ' />
+        <label className='min-[768px]:w-[40%] w-[50%] max-[400px]:!w-[220px] min-[400px]:min-w-[250px] h-[40px] flex items-center gap-3 p-2 bg-[var(--foreground)]  rounded placeholder:text-[var(--text)] placeholder:font-medium'>
+          <Search className='w-4 h-4 text-[var(--text)]' />
           <input type="text" name='search' placeholder='Search files and folders...' className='outline-0' onChange={(e)=>{setAllFiles(files.filter(f =>
   f.filename.toLowerCase().includes(e.target.value.toLowerCase())))}}/>
         </label>

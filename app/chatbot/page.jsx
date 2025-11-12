@@ -132,12 +132,13 @@ const page = () => {
       ) : (
         <div className="flex bg-[var(--foreground)] gap-3">
           <SideBar
+          atab={3}
             showBar={showBar}
             setShowBar={setShowBar}
-            className={`${iconOnly ? "iconOnly min-[768px]:shrinkWidth" : " min-[768px]:growWidth"}`}
+            className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
           />
-          <div className="grid grid-rows-[1fr_10fr] w-full overflow-hidden bg-[var(--foreground)] h-screen relative">
-            <div className=" p-4 flex justify-between z-50 rounded w-full">
+          <div className=" w-full overflow-hidden grid bg-[var(--foreground)] h-screen relative">
+            <div className=" p-4 flex justify-between z-50 rounded w-full fixed top-0">
               <button
                 className="p-2 px-3 bg-[var(--fileBox)] mr-2 max-[768px]:hidden"
                 onClick={() => setIconOnly(!iconOnly)}
@@ -150,11 +151,11 @@ const page = () => {
               >
                 <Columns2 className="w-4 h-4" />
               </button>
-            <h1 className="-ml-6">CaseMate</h1>
+            <h1 className={`min-[768px]:block hidden transition-all duration-500  ${iconOnly ? "-ml-30" :  "-ml-78"}`}>CaseMate</h1>
             <small></small>
             </div>
             {chat.length === 0 && (
-              <div className="mt-[56px] mb-[6rem] px-2 w-[100%]">
+              <div className="mt-[56px] mb-[6rem] px-2 w-[100%] bg-[var(--foreground)]">
                 <div className="flex flex-col items-center justify-center h-full text-center p-6 space-y-6">
                   {/* Welcome Message */}
                   <h1 className=" text-[var(--fileText)] max-w-md font-bold">
@@ -184,7 +185,7 @@ const page = () => {
               </div>
             )}
             {chat.length !== 0 && (
-              <div className="chatroom w-[100%] overflow-y-scroll max-w-[800px] mx-auto" style={{scrollbarWidth : "none"}}>
+              <div className="chatroom w-[100%] overflow-y-scroll overflow-x-hidden min-[768px]:max-w-[800px] mx-auto mt-[70px] mb-[80px]" style={{scrollbarWidth : "none"}}>
                 {chat.map((m, i) =>
                   m.role === "assistant" ? (
                     <Bot
@@ -227,14 +228,14 @@ const page = () => {
                 )}
               </div>
             )}
-            <div className="w-full px-4 flex items-end justify-center gap-3 py-3 bg-transparent max-w-[800px] absolute bottom-0 left-1/2 -translate-x-1/2">
+            <div className="w-full  px-4 flex items-end justify-center gap-3 py-3 bg-transparent min-[768px]:max-w-[800px] absolute bottom-0 left-1/2 -translate-x-1/2">
               {/* <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
                 <img src="mic.svg" alt="" />
               </button> */}
 
               <label
                 htmlFor="message"
-                className="flex items-end min-[768px]:p-4 p-2 shadow-2xl rounded-2xl w-full relative bg-[var(--fileBox)]"
+                className="flex items-end min-[768px]:p-4 p-2 shadow rounded-2xl py-4 px-3 w-full relative bg-[var(--fileBox)]"
               >
                 <div
                   contentEditable="true"

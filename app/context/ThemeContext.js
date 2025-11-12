@@ -1,24 +1,47 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { createContext } from 'react'
+import { flushSync } from 'react-dom';
 export const Theme = createContext();
 const ThemeContext = ({children}) => {
     const[theme,setTheme] = useState(true);
     useEffect(()=>{
-        if(!window.innerHeight) return
-       const theme = localStorage.getItem("theme")
-       if(theme){ 
-        setTheme(theme) 
-        return document.documentElement.classList.add(theme)
-    }
-       setTheme("light")
-       document.documentElement.classList.add("Light")
-    },[]);
-    useEffect(()=>{
         document.documentElement.classList.add(theme); 
         document.documentElement.classList.remove(theme === "dark" ? "light" : "dark" );
     },[theme])
-    function ChangeTheme(){ setTheme(theme === "light" ? "dark" : "light")}
+  function ChangeTheme(ref = "null"){ 
+      if(ref === "null") return
+      
+     const transition=  document.startViewTransition(()=>{
+        flushSync(()=>{
+          setTheme(theme === "light" ? "dark" : "light");
+        })
+    })
+     const { top, left, width, height } = ref.current.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const right = window.innerWidth - left;
+    const bottom = window.innerHeight - top;
+
+    // Correct full-screen radius based on farthest corner
+    const radius = Math.hypot(Math.max(x, right), Math.max(y, bottom));
+  
+    transition.ready.then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${radius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 1000,
+            easing: "ease-in-out",
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+      });
+    }
   return (
     <Theme.Provider value={{theme,ChangeTheme}} >
       {children}

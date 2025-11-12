@@ -28,7 +28,7 @@ const Message = ({img,text,Onedit,id}) => {
     <div className={`flex items-center justify-between w-[100%] gap-3 p-5 relative ${edit && "mb-6"}`}>
         <img src={`/${img}`} width={37} height={37} alt="" className="icon" />
         <span className='flex justify-start w-full'>
-            <div contentEditable={edit && "true"} ref={divRef} suppressContentEditableWarning={true} className='!text-[13px] !font-medium text-start w-full outline-0'>{message}</div>
+            <div contentEditable={edit && "true"} ref={divRef} suppressContentEditableWarning={true} className='!text-[13px] !font-medium text-start w-full outline-0 wrap-anywhere whitespace-pre-wrap'>{message}</div>
             </span>
             {!edit && 
             <span className='relative group/edit'>

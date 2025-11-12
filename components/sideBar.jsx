@@ -1,31 +1,56 @@
 "use client"
 import React, { useContext, useEffect, useState } from 'react'
-import { Folder,LayoutDashboard ,MessagesSquare,Sun,Moon} from 'lucide-react'
+import { Folder,LayoutDashboard ,MessagesSquare,Sun,Moon, Bot} from 'lucide-react'
 import { Theme } from '@/app/context/ThemeContext'
 import { inter } from '@/app/layout'
-const SideBar = ({className,showBar,setShowBar}) => {
+import { useRef } from 'react'
+import Link from 'next/link'
+const SideBar = ({className,showBar,setShowBar,atab=0}) => {
     const options = [
-        {name : "Dashboard",icon : LayoutDashboard},
-        {name : "FileVault",icon : Folder},
-        {name : "ChatRoom",icon :  MessagesSquare}
-    ]
-    const [active,setActive] = useState(0);
+  {
+    name: "Dashboard",
+    icon: LayoutDashboard,
+    route: "/dashboard",
+    description: "Quick overview & insights"
+  },
+  {
+    name: "FileVault",
+    icon: Folder,
+    route: "/filemanager",
+    description: "Manage and access files"
+  },
+  {
+    name: "ChatRoom",
+    icon: MessagesSquare,
+    route: "/chat",
+    description: "Chat with clients & team"
+  },
+  {
+    name: "CaseBot",
+    icon: Bot,
+    route: "/chatbot",
+    description: "AI assistant for cases"
+  }
+];
+
+    const [active,setActive] = useState(atab);
     const {theme,ChangeTheme} = useContext(Theme);
+    const ref = useRef(null);
   return (
 <div className={`${!showBar && "max-[768px]:hidden"}`}>
 
-    <div className={className+` ${inter.className}  max-[768px]:fixed top-0 z-[10000] bg-[var(--foreground)] h-screen w-[250px] p-2 grid grid-rows-[1fr_8fr] shrink-0 `}>
+    <div className={className+`  ${inter.className} group  max-[768px]:fixed top-0 z-[10000] bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 `}>
         <div className='flex justify-between items-center gap-2 p-1 rounded-md h-min '>
       <span className='flex justify-between items-center gap-3 py-1 rounded-md h-min !text-[14px] text-[var(--text)]'>
         <button className='p-2 bg-blue-600 shadow rounded-md text-[var(--svgtxt)]'>
             <Folder className='w-5 h-5' />
         </button>
-       <p className='[.iconOnly_&]:hidden'>FileVault <br /> <small className='!text-[12px] whitespace-nowrap'>Manage files
+       <p className='[.iconOnly_&]:hidden'>{options[atab].name} <br /> <small className='!text-[12px] whitespace-nowrap'>{options[atab].description} 
         </small>
         </p> 
 
       </span>
-      <button className='[.iconOnly_&]:hidden p-2  shadow rounded-md text-[var(--text)] font-normal bg-[var(--fileBox)]' onClick={()=>ChangeTheme()}>
+      <button ref={ref} className='[.iconOnly_&]:hidden p-2  shadow rounded-md text-[var(--text)] font-normal bg-[var(--fileBox)]' onClick={()=>ChangeTheme(ref)}>
        {theme ==="dark" ?  <Sun className='w-5 h-5' /> : <Moon className='w-5 h-5' />}
       </button>
         </div>
@@ -33,7 +58,9 @@ const SideBar = ({className,showBar,setShowBar}) => {
         <small className='font-medium [.iconOnly_&]:hidden'>Menu</small>
         <ul className='grid gap-2 mt-3'>
             {options.map((i,index)=>(
-            <li key={index} onClick={()=>setActive(index)} className={`flex gap-2 p-2 font-normal items-center rounded-md ${active === index && "bg-blue-600 text-white"}`}><i.icon className='w-4 h-4'/> <h3 className='!text-[14px] [.iconOnly_&]:hidden'>{i.name}</h3></li>
+              <Link key={index} href={i.route}>
+                <li  onClick={()=>setActive(index)} className={`group-[.iconOnly]:shrinkWidth group-not-[.iconOnly]:growWidth flex gap-2 p-2 font-normal items-center rounded-md ${active === index && "bg-blue-600 text-white"}`}><i.icon className='w-4 h-4'/> <h3 className='!text-[14px] [.iconOnly_&]:hidden'>{i.name}</h3></li>
+              </Link>
             ))}
         </ul>
       </div>

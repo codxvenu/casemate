@@ -34,6 +34,11 @@
     --purple: #6c63ff;
     --light_purple: #9292fd;
 }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 h1{
   font-weight: 500;
   font-size: 24px;
@@ -62,6 +67,9 @@ html{
 .pulseimg{
   animation: pulse 1.5s infinite ease-in-out;
 }
+.colspan{
+  grid-column: 2/3;
+}
 @keyframes pulse {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.2); }
@@ -80,6 +88,16 @@ html{
 .shrinkWidth {
   animation: widthShrink 0.5s ease-in-out forwards;
 }
+@media  (max-width: 640px) {
+  .growWidth {
+    animation: none;
+    width: 250px;
+  }
+  .shrinkWidth {
+    animation: none;
+  }
+  
+}
 @keyframes widthGrow {
   from { width: 60px; }
   to { width: 250px; }
@@ -97,3 +115,28 @@ html{
  .bounceDot:nth-child(3) {
   animation-delay: 0.4s;
 }
+tr th{
+  text-align: center;
+  padding: .5rem .678rem;
+  font-weight: 500;
+  font-size: 14px;
+    width: max-content;
+}
+  tr td{
+  text-align: center;
+   padding: .5rem .678rem;
+   font-weight: 400;
+   font-size:  13px;
+   width: max-content;
+}
+table{
+  width: 100%;
+  border-radius: 5px;
+}
+tr{
+  border-bottom: 1px solid var(--border-color);
+}
+table tbody tr:last-child{
+  border-bottom: none;
+}
+.scrollbtn::-webkit-scrollbar-thumb{ display: none; }

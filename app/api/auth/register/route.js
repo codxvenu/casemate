@@ -8,17 +8,18 @@ export async function POST(req) {
       return Response.json({ error: "Email or Password empty" },{status: 400,});
     
     const pass = await bcrypt.hash(user.password,10);
-    console.log(user.phone);
-
     const [rows] = await db.query("insert into users(name,email,phone,password) values(?,?,?,?)", [user.name,user.email,user.phone,pass]);
     if (rows.length == 0) return Response.json({  error: "email or password wrong" },{status: 400,});
-    const token = jwt.sign({user:user.email,id : user.id},"helloworld",{expiresIn:"1h"})
+    const token = jwt.sign({user:user.email,id : rows.insertId},"helloworld",{expiresIn:"1h"})
     req.cookies.set("token",token,{httpOnly: true,
     secure: true,
     sameSite: "None",
-    maxAge: 3600,          // in seconds
+    maxAge: 3600, 
+    // });         // in seconds
     path: "/",
     domain: ".casemate.icu" });
+    const [rows2] = await db.query("insert into stats(Users,cases,Appoinments,userid) values(0,0,0,?)",[rows.insertId]);
+    if(rows2.affectedRows === 0) return Response.json({  error: "Failed to setup stats" },{status: 400,});
     return Response.json({ status: 200, message: "User Logged In" });
   } catch (error) {
     return Response.json({  error: error.message },{status: 400});
