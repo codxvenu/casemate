@@ -38,7 +38,7 @@ const Message = ({img,text,Onedit,id}) => {
             }
 {edit && 
             <span className='flex text-[11px] absolute -bottom-2 right-5 w-[100%] justify-end gap-[10px]'>
-              <button className='border-[1px] border-[#BBBBBB] bg-black text-[var(--text)] px-4 py-1' onClick={handleSave}>Save</button>
+              <button className='border-[1px] border-[#BBBBBB] bg-[var(--text)] text-[var(--foreground)] px-4 py-1' onClick={handleSave}>Save</button>
               <button className='border-[1px] border-[#BBBBBB] px-3 py-2' onClick={handleCancel}>Cancel</button>
             </span>
 }

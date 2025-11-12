@@ -11,25 +11,25 @@ const SideBar = ({className,showBar,setShowBar,atab=0}) => {
     name: "Dashboard",
     icon: LayoutDashboard,
     route: "/dashboard",
-    description: "Quick overview & insights"
+    description: "Quick overview"
   },
   {
     name: "FileVault",
     icon: Folder,
     route: "/filemanager",
-    description: "Manage and access files"
+    description: "Manage files"
   },
   {
     name: "ChatRoom",
     icon: MessagesSquare,
     route: "/chat",
-    description: "Chat with clients & team"
+    description: "Chat clients"
   },
   {
     name: "CaseBot",
     icon: Bot,
     route: "/chatbot",
-    description: "AI assistant for cases"
+    description: "AI assistant"
   }
 ];
 
