@@ -201,7 +201,7 @@ async function handleAddnotice(){
     body : JSON.stringify({formData})
   });
   const data = res.json();
-  if(req.ok) return alert(data.error);  
+  if(!req.ok) return alert(data.error);  
 }
 function ConvertDate(date){
   var date = new Date(date);
@@ -248,7 +248,7 @@ function ConvertTime(time){
          <div className="p-2 bg-[var(--fileBox)] min-[1024px]:hidden">
           <div  className="p-2 bg-[var(--foreground)] flex justify-between items-center relative">
             <span>
-           <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium">{user.name.split(" ")[0]}</span>  
+           <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium">{user?.name?.split(" ")[0]}</span>  
             </span>
            <EllipsisVertical className="w-5 h-5" onClick={()=>setShowActions(!showActions)} />
            {showActions && 
@@ -365,9 +365,9 @@ function ConvertTime(time){
               {/* <h1 className='!text-xl'>Qucik actions</h1> */}
               <div className="overflow-y-scroll  max-h-[290px] bg-[var(--foreground)] h-full p-2" style={{scrollbarWidth : "none"}}>
 
-          <>
-          <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium whitespace-nowrap overflow-ellipsis">{user.name}</span>  
-          </>  
+          {/* <>
+          <span className={`text-[18px] font-semibold`}>Welcome Back,</span> <span className="text-[16px] font-medium whitespace-nowrap overflow-ellipsis">{user?.name  }</span>  
+          </>   */}
            <br /><span className="text-[15px] font-normal">
             You last updated a case 2 hours ago. You have 1 appointment today
             </span>
@@ -451,7 +451,7 @@ function ConvertTime(time){
       <div className="backdrop-blur-md fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-screen h-screen flex items-center justify-center">
       <div className="w-[430px] h-[350px]  bg-[var(--foreground)] p-4">
         <h1 className="text-center">Add note</h1>
-        <form className="flex flex-col gap-2">
+        <form className="flex flex-col gap-2" >
           <div className="flex justify-center flex-col gap-1">
           <label>Title</label>
           <input type="text" placeholder="title" className="bg-[var(--fileBox)] p-3 outline-0" onChange={(e)=>{setformData((prev)=>{return {...prev,"title" : e.target.value}})}} />
@@ -466,7 +466,7 @@ function ConvertTime(time){
           </div>
           <div className="flex mt-2 w-full gap-2">
          <button className="flex w-full items-center px-3 py-2 bg-[var(--text)] text-[var(--foreground)] rounded-[5px] justify-center" onClick={()=>setShownote(!shownote)}>Cancel</button>
-         <button className="flex w-full items-center px-3 py-2 bg-[var(--text)] text-[var(--foreground)] rounded-[5px] justify-center" onClick={()=>handleAddnotice()}>Add</button>
+         <button className="flex w-full items-center px-3 py-2 bg-[var(--text)] text-[var(--foreground)] rounded-[5px] justify-center" type="button" onClick={()=>handleAddnotice()}>Add</button>
           </div>
         </form>
       </div>

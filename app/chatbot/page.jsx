@@ -8,12 +8,13 @@ import { User } from "../context/UserContext";
 import SideBar from "@/components/sideBar";
 const page = () => {
   const [chat, setChats] = useState([]);
+  const [chatID, setChatID] = useState(0);
   const { user } = useContext(User);
   const { socket } = useContext(Socket);
   const [empty, setEmpty] = useState(false);
   const [message, setMessage] = useState("");
   const [prevLen, setPrevLen] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
   useEffect(() => {
@@ -36,10 +37,6 @@ const page = () => {
       }
     });
     socket.emit("register", user.id);
-    socket.on("history", (history) => {
-      setLoading(false);
-      setChats(history);
-    });
     socket.on("replyChunk", ({ text }) => {
       setChats((prev) => {
         if (prev[prev.length - 1]) {
@@ -76,6 +73,7 @@ const page = () => {
   }, [socket, user]);
   useEffect(() => {
     const chatroom = document.querySelector(".chatroom")
+    if(!chatroom) return 
     if (prevLen !== chat.length) {
       chatroom.scrollTo({
         top: chatroom.scrollHeight,
@@ -84,24 +82,29 @@ const page = () => {
     }
     setPrevLen(chat.length);
   }, [chat]);
+  
+  var titlePrompt = "";
   function sendMessage() {
     if (!socket || !user) return;
+    if(!chatID) return
     const now = new Date();
     if (message.replace(" ", "") === "" || !message) return;
-
+    if(chat.length === 0){
+        titlePrompt = " do add a title to chat acc to the msg description"
+    }
     setChats((prev) => {
       return [
         ...prev,
-        { role: "user", text: message },
+        { role: "user", text: message+titlePrompt },
         { role: "assistant", text: "loading", completed: false },
       ];
     });
-    console.log({ userId: user.id, message: message, created_at: now });
-
+    
     socket.emit("chatMessage", {
       userId: user.id,
       message: message,
       created_at: now,
+      chatID
     });
     setMessage("");
     document.getElementById("sendtxt").innerText = "";
@@ -109,6 +112,8 @@ const page = () => {
   }
   function sendFn(m) {
     if (!socket || !user) return;
+    if (!chatID) return console.log("count",chatID)
+    console.log("count",chatID)
     const now = new Date();
     setChats((prev) => {
       return [
@@ -123,21 +128,39 @@ const page = () => {
       userId: user.id,
       message: m,
       created_at: now,
+      chatID
     });
   }
+  useEffect(()=>{
+    if(chatID === 0) return setChats([]);
+    setLoading(true)
+    setChats([])
+   async function handleChat(){
+      const res = await fetch(`/api/chat/${chatID}`,{
+        credentials : "include"
+      })
+      const data = await res.json();
+      if(!res.ok) return alert(data.error)
+      setChats([...data.data]);
+      setTimeout(()=>setLoading(false),1000)
+    }
+    handleChat()
+  },[chatID])
+ useEffect(()=>console.log("page render")
+ )
   return (
-    <>
-      {loading ? (
-        <>loading</>
-      ) : (
         <div className="flex bg-[var(--foreground)] gap-3">
           <SideBar
-          atab={3}
+          setChatID={setChatID}
             showBar={showBar}
             setShowBar={setShowBar}
+            atab={3}
             className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
           />
-          <div className=" w-full overflow-hidden grid bg-[var(--foreground)] h-screen relative">
+           {loading ? (
+        <>loading</>
+      ) : (
+          <div className=" w-full overflow-hidden grid bg-[var(--foreground)] h-screen relative ml-[-11px]">
             <div className=" p-4 flex justify-between z-50 rounded w-full fixed top-0">
               <button
                 className="p-2 px-3 bg-[var(--fileBox)] mr-2 max-[768px]:hidden"
@@ -268,9 +291,8 @@ const page = () => {
               </label>
             </div>
           </div>
+     )}
         </div>
-      )}
-    </>
   );
 };
 
