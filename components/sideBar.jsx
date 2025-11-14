@@ -5,7 +5,7 @@ import { Theme } from '@/app/context/ThemeContext'
 import { inter } from '@/app/layout'
 import { useRef } from 'react'
 import Link from 'next/link'
-const SideBar = ({className,showBar,setShowBar,atab=0,setChatID}) => {
+const SideBar = ({className,showBar,setShowBar,atab=0,setChatID="hidden"}) => {
     const options = [
   {
     name: "Dashboard",
@@ -54,35 +54,37 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID}) => {
     const [Caseactive,setCaseactive] = useState(atab);
     const {theme,ChangeTheme} = useContext(Theme);
     const ref = useRef(null);
-    async function handlenewchat(index){
-      setChatID(0);
-      const now = new Date();
-       const res = await fetch(`/api/newchat`,{
-          credentials : "include",
-          method : "POST",
-          headers : {"Content-Type" : "application/json"},
-          body : JSON.stringify({created_at : now,index})
-        })
-        const data = await res.json()
-        if(!res.ok) return console.log(data)
-        setChatID(data.id)
-      }
+    if(setChatID !== "hidden"){
+      async function handlenewchat(index){
+        setChatID(0);
+        const now = new Date();
+         const res = await fetch(`/api/newchat`,{
+            credentials : "include",
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify({created_at : now,index})
+          })
+          const data = await res.json()
+          if(!res.ok) return console.log(data)
+          setChatID(data.id)
+        }
+      useEffect(()=>{
+       async function handleGroupChat(){
+          const res = await fetch("/api/chat",{
+            credentials : "include"
+          })
+          const data = await res.json()
+          if(!res.ok && data.error === "no active group") return handlenewchat()
+          setChatGroup(data.data)
+        console.log(data);
+        
+        }
+        handleGroupChat()
+      },[activeChat])
     useEffect(()=>{
-     async function handleGroupChat(){
-        const res = await fetch("/api/chat",{
-          credentials : "include"
-        })
-        const data = await res.json()
-        if(!res.ok && data.error === "no active group") return handlenewchat()
-        setChatGroup(data.data)
-      console.log(data);
-      
-      }
-      handleGroupChat()
-    },[activeChat])
-  useEffect(()=>{
-    setChatID(ChatGroup?.sort((a,b)=>new Date(a.lastUpdated) - new Date(b.lastUpdated))[ChatGroup.length-1]?.id)
-  },[ChatGroup])
+      setChatID(ChatGroup?.sort((a,b)=>new Date(a.lastUpdated) - new Date(b.lastUpdated))[ChatGroup.length-1]?.id)
+    },[ChatGroup])
+    }
   return (
 <div className={`${!showBar && "max-[768px]:hidden"}`}>
 
@@ -111,6 +113,7 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID}) => {
             ))}
             
         </ul>
+        {setChatID !== "hidden" && 
           <div className=' group-[.iconOnly]:hidden'>
         <ul className='grid'>
             {caseDeta.map((i,index)=>(
@@ -134,6 +137,7 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID}) => {
             ))}
         </ul>
       </div>
+        }
       </div>
     </div>
 <div className='backdrop-blur-sm w-[calc(100vw-250px)] h-screen absolute top-0 right-0 z-[100000] min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}></div>
