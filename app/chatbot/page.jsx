@@ -7,6 +7,7 @@ import { Socket } from "../context/SocketContext";
 import { User } from "../context/UserContext";
 import SideBar from "@/components/sideBar";
 import ChatSearchPopup from "@/components/ChatSearch";
+import ChatBotLoading from "@/components/Loadings/ChatBotLoading";
 const page = () => {
   const [chat, setChats] = useState([]);
   const [chatID, setChatID] = useState(0);
@@ -164,9 +165,7 @@ const page = () => {
             atab={3}
             className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
           />
-           {loading ? (
-        <>loading</>
-      ) : (
+          
           <div className=" w-full overflow-hidden grid bg-[var(--foreground)] h-screen relative ml-[-11px]">
             <div className=" p-4 flex justify-between z-50 rounded w-full fixed top-0">
               <button
@@ -192,7 +191,7 @@ const page = () => {
               </h1>
            <small></small>
             </div>
-            {chat.length === 0 && (
+            {chat.length === 0 && !loading && (
               <div className="mt-[56px] mb-[6rem] px-2 w-[100%] bg-[var(--foreground)]">
                 <div className="flex flex-col items-center justify-center h-full text-center p-6 space-y-6">
                   {/* Welcome Message */}
@@ -222,6 +221,9 @@ const page = () => {
                 </div>
               </div>
             )}
+             {loading && <ChatBotLoading/>}
+            {!loading &&
+            <>
             {chat.length !== 0 && (
               <div className="chatroom w-[100%] overflow-y-scroll overflow-x-hidden min-[768px]:max-w-[800px] mx-auto mt-[70px] mb-[80px]" style={{scrollbarWidth : "none"}}>
                 {chat.map((m, i) =>
@@ -266,6 +268,8 @@ const page = () => {
                 )}
               </div>
             )}
+            </>
+             }
             <div className="w-full  px-4 flex items-end justify-center gap-3 py-3 bg-transparent min-[768px]:max-w-[800px] absolute bottom-0 left-1/2 -translate-x-1/2">
               {/* <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
                 <img src="mic.svg" alt="" />
@@ -306,7 +310,6 @@ const page = () => {
               </label>
             </div>
           </div>
-     )}
         </div>
   );
 };
