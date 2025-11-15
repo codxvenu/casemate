@@ -1,11 +1,12 @@
 "use client";
 import { React, useContext, useEffect, useState } from "react";
-import { Columns2 } from "lucide-react";
+import { Columns2,Search } from "lucide-react";
 import Message from "@/components/message";
 import Bot from "@/components/bot";
 import { Socket } from "../context/SocketContext";
 import { User } from "../context/UserContext";
 import SideBar from "@/components/sideBar";
+import ChatSearchPopup from "@/components/ChatSearch";
 const page = () => {
   const [chat, setChats] = useState([]);
   const [chatID, setChatID] = useState(0);
@@ -17,6 +18,7 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
+   const [search,setSearch] = useState(false)
   useEffect(() => {
     if (!socket || !user) return;
     console.log(user, user.id);
@@ -133,6 +135,7 @@ const page = () => {
   }
   useEffect(()=>{
     if(chatID === 0) return setChats([]);
+    console.log("search hit");
     setLoading(true)
     setChats([])
    async function handleChat(){
@@ -142,6 +145,8 @@ const page = () => {
       const data = await res.json();
       if(!res.ok) return alert(data.error)
       setChats([...data.data]);
+    console.log(data.data);
+    
       setTimeout(()=>setLoading(false),1000)
     }
     handleChat()
@@ -154,6 +159,8 @@ const page = () => {
           setChatID={setChatID}
             showBar={showBar}
             setShowBar={setShowBar}
+            setSearch={setSearch}
+            search={search}
             atab={3}
             className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
           />
@@ -174,8 +181,16 @@ const page = () => {
               >
                 <Columns2 className="w-4 h-4" />
               </button>
-            <h1 className={`min-[768px]:block hidden transition-all duration-500  ${iconOnly ? "-ml-30" :  "-ml-78"}`}>CaseMate</h1>
-            <small></small>
+ 
+            <h1 className={`min-[768px]:flex hidden transition-all duration-500 relative  ${iconOnly ? "-ml-30" :  "-ml-78"}`}>CaseMate 
+               <button
+                className={`p-2 px-3 bg-[var(--foreground)] mr-2 absolute  left-[41vw]`}
+                onClick={() => setSearch(!showBar)}
+              >
+              <Search className="  w-4 h-4" />
+              </button>
+              </h1>
+           <small></small>
             </div>
             {chat.length === 0 && (
               <div className="mt-[56px] mb-[6rem] px-2 w-[100%] bg-[var(--foreground)]">

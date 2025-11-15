@@ -18,12 +18,13 @@
     --text_input: #fafafa;
     --purple: #6c63ff;
     --light_purple: #9292fd;
+    --shimmer : rgba(255, 255, 255, 0.45);
 }
 .light {
     --label: whitesmoke;
     --background: #fafafa;
     --foreground: white;
-    --fileBox : #FAFAFA;
+    --fileBox : #f8f8f8;
     --text: #131313;
     --accent: white;
     --svgtxt: white;
@@ -33,6 +34,7 @@
     --fileText : #8b8b8b;
     --purple: #6c63ff;
     --light_purple: #9292fd;
+    --shimmer : rgba(0, 0, 0, 0.1);
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -148,3 +150,28 @@ table tbody tr:last-child{
   border-bottom: none;
 }
 .scrollbtn::-webkit-scrollbar-thumb{ display: none; }
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--shimmer),
+    transparent
+  );
+  animation: shimmer-move 1.3s infinite;
+}
+
+@keyframes shimmer-move {
+  0% { left: -150px; }
+  100% { left: 100%; }
+}

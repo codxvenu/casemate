@@ -2,7 +2,7 @@ import React from 'react'
 import {TextAlignJustify,House,ChevronRight,Search,Grid,List,ArrowUpDown,Folder,Info,ChevronUp,FileSpreadsheet,EllipsisVertical, Download, Share2, Edit, Trash2,FileQuestionMark,Video,Music,FileText,Image as Imageicon,CloudUpload} from 'lucide-react'
 const GridView = ({allFiles,handleFileType,actions,handleSize,formatDate,DownloadFile,setClose}) => {
   return (
-  <div className="store p-6 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 justify-items-center overflow-scroll" style={{scrollbarWidth : "none"}}>
+  <div className="store p-6 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 justify-items-center overflow-scroll justify-items-start" style={{scrollbarWidth : "none"}}>
 {allFiles && allFiles.map((i,index)=>(
         <div key={index} className='bg-[var(--fileBox)] min-w-[243px] px-3 py-3 rounded-2xl min-[850px]:max-w-[350px]  w-[100%] shadow hover:translate-y-1 transition-all duration-150 ease-in-out'>
           <span className='flex justify-between items-center '>
