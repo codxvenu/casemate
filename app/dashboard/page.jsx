@@ -5,7 +5,7 @@ import { Columns2, DoorOpen, EllipsisVertical,Bell,Trash2, ChevronRight, Chevron
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 
-import { inter, montserrat } from "../layout";
+import { inter} from "../layout";
 import Loader from "@/components/loader";
 import { User } from "../context/UserContext";
 const page = () => {
@@ -320,7 +320,7 @@ function ConvertTime(time){
                </ul>
             {notice.filter((i)=>ConvertDate(i.fortime).day === SearchDate.day && ConvertDate(i.fortime).month === SearchDate.month.id && ConvertDate(i.fortime).year === SearchDate.year).length ===0 && <h3 className="flex items-center justify-center p-12 text-[14px]">no notes </h3>}
               </div>
-             <div className={`bg-[var(--foreground)] text-center align-middle flex items-center justify-start p-3 ${montserrat.className}`}>
+             <div className={`bg-[var(--foreground)] text-center align-middle flex items-center justify-start p-3 `}>
               {currentNote.length === 0 ? 
               "No note selected"
               : 

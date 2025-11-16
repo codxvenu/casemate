@@ -19,7 +19,8 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
-   const [search,setSearch] = useState(false)
+   const [search,setSearch] = useState(false);
+  
   useEffect(() => {
     if (!socket || !user) return;
     console.log(user, user.id);
@@ -134,13 +135,14 @@ const page = () => {
       chatID
     });
   }
+ 
   useEffect(()=>{
     if(chatID === 0) return setChats([]);
     console.log("search hit");
     setLoading(true)
     setChats([])
    async function handleChat(){
-      const res = await fetch(`/api/chat/${chatID}`,{
+      const res = await fetch(`/api/chatbot/${chatID}`,{
         credentials : "include"
       })
       const data = await res.json();
@@ -152,8 +154,6 @@ const page = () => {
     }
     handleChat()
   },[chatID])
- useEffect(()=>console.log("page render")
- )
   return (
         <div className="flex bg-[var(--foreground)] gap-3">
           <SideBar

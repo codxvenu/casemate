@@ -3,22 +3,14 @@ import React, { useEffect, useState } from "react";
 import { X, MessageSquare, Search } from "lucide-react";
 import { inter } from "@/app/layout";
 import SearchLoading from "./Loadings/SearchLoading";
-const ChatSearch = ({ setChatID, setSearch }) => {
+const ChatSearch = ({ setChatID, setSearch,SearchHistory }) => {
   const [SearchQuery, setSearchQuery] = useState("");
   const [SearchResult, setSearchResult] = useState([]);
-  const [SearchHistory, setSearchHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  async function handleShistory(){
-    const res = await fetch("/api/chat/search/history",{
-      credentials : "include"
-    })
-    const data = await res.json()
-    if(!res.ok) return console.log(data.error)
-    setSearchHistory(data.data)
-  } 
+   
   async function handleAddShistory(query){
-    const res = await fetch("/api/chat/search/history",{
+    const res = await fetch("/api/chatbot/search/history",{
       credentials : "include",
       method : "POST",
       body : JSON.stringify({query})
@@ -26,14 +18,11 @@ const ChatSearch = ({ setChatID, setSearch }) => {
     const data = await res.json()
     if(!res.ok) return console.log(data.error)
   } 
-  useEffect(()=>{
-    handleShistory()
-  },[])
   useEffect(() => {
     if(!SearchQuery.trim()) return
     async function handleSearch() {
       setLoading(true)
-      const res = await fetch(`/api/chat/search/${SearchQuery}`);
+      const res = await fetch(`/api/chatbot/search/${SearchQuery}`);
       const data = await res.json();
       if (!res.ok) return console.log(data.error);
       setSearchResult(data.result ?? []);

@@ -7,7 +7,7 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import ChatBotHistory from './SubBar/ChatBotHistory'
 import ChatSearch from './ChatSearch'
-const SideBar = ({className,showBar,setShowBar,atab=0,setChatID=0,search,setSearch}) => {
+const SideBar = ({className,showBar,setShowBar,atab=0,setChatID,search,setSearch}) => {
     const options = [
   {
     name: "Dashboard",
@@ -34,17 +34,15 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID=0,search,setSear
     description: "AI assistant"
   }
 ];
- 
-
-   
     const [active,setActive] = useState(atab);
     const[activeChat,setActiveChat] = useState(0);
     const {theme,ChangeTheme} = useContext(Theme);
     const ref = useRef(null);
+    
   return (
 <div className={`${!showBar && "max-[768px]:hidden"}`}>
 
-    <div className={className+`  ${inter.className} group  max-[768px]:fixed top-0 z-[10000] bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 `}>
+    <div className={className+`  ${inter.className} group  max-[768px]:fixed top-0  bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 z-[100000000]`}>
         <div className='flex justify-between items-center gap-2 p-1 rounded-md h-min '>
       <span className='flex justify-between items-center gap-3 py-1 rounded-md h-min !text-[14px] text-[var(--text)]'>
         <button className='p-2 bg-blue-600 shadow rounded-md text-[var(--svgtxt)]'>
@@ -70,14 +68,12 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID=0,search,setSear
             
         </ul>
         {setChatID && 
-          <ChatBotHistory setChatID={setChatID} activeChat={activeChat}/>
+          <ChatBotHistory setChatID={setChatID} activeChat={activeChat} search={search} setSearch={setSearch}/>
         }
       </div>
     </div>
 <div className='backdrop-blur-sm w-[calc(100vw-250px)] h-screen absolute top-0 right-0 z-[100000] min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}></div>
-{search && 
- <ChatSearch setChatID={setChatID} setSearch={setSearch}/> 
-}
+
 </div>
   )
 }

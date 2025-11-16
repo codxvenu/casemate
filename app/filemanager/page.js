@@ -1,7 +1,7 @@
 "use client"
 import React, { createElement, useContext, useEffect } from 'react'
 import { useState } from 'react'
-import {TextAlignJustify,Type,HardDrive,Clock,House,ChevronRight, SortAsc,
+import {TextAlignJustify,Type,HardDrive,Clock,House,Ellipsis, SortAsc,
   SortDesc,Search,Grid,List,Columns2,ArrowUpDown,Folder,Info,ChevronUp,FileSpreadsheet,ChevronDown,EllipsisVertical, Download, Share2, Edit, Trash2,FileQuestionMark,Video,Music,FileText,Image as Imageicon,CloudUpload} from 'lucide-react'
 import UploadFile from '@/components/uploadFile'
 import Image from 'next/image'
@@ -24,6 +24,7 @@ const page = () => {
     const [close,setClose] = useState(false);
     const [files,setFiles] = useState(false);
     const [iconOnly,setIconOnly] = useState(false);
+    const[showOptions,setShowOptions] = useState(false)
     async function handleFiles(){
      if(!user.user?.id) return
        const res = await fetch(`/api/files`)
@@ -97,34 +98,34 @@ const page = () => {
       handleFiles()
     }
     function handleSize(i){
-      const size = (i/(1024*1024)).toFixed(2)
-      if(size == 0.00) return `${(i/1024).toFixed(2)} Kb`
-      return `${size} Mb`
+      const size = (i/1024).toFixed(2)
+      if(size < 1000) return `${(i/1024).toFixed(2)} KB`
+      return `${size/1024} MB`
     }
     function handleFileType(type){
       switch (type) {
         case "pdf":
-          return <FileText className="w-10 h-10 p-2.5 text-red-500 bg-[var(--foreground)] rounded-xl" />
+          return <FileText className="w-10 h-10 p-2.5 text-red-500 bg-[var(--fileBox)] rounded-xl" />
           
         case "docx":
-          return <FileText className="w-10 h-10 p-2.5 text-blue-500 bg-[var(--foreground)] rounded-xl" />
+          return <FileText className="w-10 h-10 p-2.5 text-blue-500 bg-[var(--fileBox)] rounded-xl" />
           
         case "mp3":
-          return <Music className="w-10 h-10 p-2.5 text-pink-500 bg-[var(--foreground)] rounded-xl"/>
+          return <Music className="w-10 h-10 p-2.5 text-pink-500 bg-[var(--fileBox)] rounded-xl"/>
         case "mp4":
-          return <Video className="w-10 h-10 p-2.5 text-shadow-amber-900 bg-[var(--foreground)] rounded-xl" />
+          return <Video className="w-10 h-10 p-2.5 text-shadow-amber-900 bg-[var(--fileBox)] rounded-xl" />
           
         case "xlsx":
-          return <FileSpreadsheet className="w-10 h-10 p-2.5 text-green-500 bg-[var(--foreground)] rounded-xl"/>
+          return <FileSpreadsheet className="w-10 h-10 p-2.5 text-green-500 bg-[var(--fileBox)] rounded-xl"/>
           
         case "png":
-          return <Imageicon className="w-10 h-10 p-2.5 text-[var(--purple)] bg-[var(--foreground)] rounded-xl"/>
+          return <Imageicon className="w-10 h-10 p-2.5 text-[var(--purple)] bg-[var(--fileBox)] rounded-xl"/>
           
         case "jpg":
-          return <Imageicon className='w-10 h-10 p-2.5 text-[var(--light_purple)] bg-[var(--foreground)] rounded-xl' />
+          return <Imageicon className='w-10 h-10 p-2.5 text-[var(--light_purple)] bg-[var(--fileBox)] rounded-xl' />
           
         default:
-          return <FileQuestionMark className='w-10 h-10 p-2.5 text-[var(--text)] bg-[var(--foreground)] rounded-xl'/>
+          return <FileQuestionMark className='w-10 h-10 p-2.5 text-[var(--text)] bg-[var(--fileBox)] rounded-xl'/>
           
       }
     }
@@ -151,7 +152,7 @@ const page = () => {
    <div className='flex'>
    <SideBar atab={1} showBar={showBar} setShowBar={setShowBar} className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`} />
     <div className={`${allFiles && "overflow-hidden h-screen"} bg-[var(--foreground)] w-screen min-h-screen h-fit flex flex-col`}>
-      <div className=' flex justify--between min-[425px]:px-4 py-4 bg-[var(--fileBox)] max-[425px]:mx-2 min-[425px]:mx-4 rounded mt-3 mb-2'>
+      <div className='relative flex justify-between min-[425px]:px-4 py-4 bg-[var(--fileBox)] max-[425px]:mx-2  rounded mt-3 mb-2'>
       <button className='p-2 px-3 bg-[var(--foreground)] mr-2 max-[768px]:hidden' onClick={()=>setIconOnly(!iconOnly)}>
        <Columns2 className="w-4 h-4"  />
       </button>
@@ -163,23 +164,27 @@ const page = () => {
           <input type="text" name='search' placeholder='Search files and folders...' className='outline-0' onChange={(e)=>{setAllFiles(files.filter(f =>
   f.filename.toLowerCase().includes(e.target.value.toLowerCase())))}}/>
         </label>
-        <span className='flex gap-4 max-[805px]:gap-1 items-center justify-end h-[40px] w-full'>
+        <button className='p-2 px-3 bg-[var(--foreground)] mr-2 min-[620px]:hidden' onClick={()=>setShowOptions(!showOptions)}>
+        <Ellipsis className="w-4 h-4 min-[640px]:hidden" />
+      </button>
+       
+        <span className={`flex gap-4 max-[805px]:gap-1 items-center justify-end w-full max-[620px]:absolute right-6 top-[55px] max-[620px]:flex-col max-[620px]:bg-[var(--fileBox)] h-fit max-[620px]:w-fit  min-[620px]:h-[40px] max-[620px]:p-2 ${!showOptions && "max-[620px]:hidden"} z-[100]`}>
          
-        <a className='flex items-center p-1 rounded-[5px] bg-[var(--foreground)] max-[500px]:hidden'>
+        <a className='flex items-center p-1 rounded-[5px] bg-[var(--foreground)]'>
           <button onClick={()=>setView(true)} className={`${view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><Grid className="w-4 h-4" /></button>
           <button onClick={()=>setView(false)} className={`${!view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><List className="w-4 h-4" /></button>
           </a>
-        <span onClick={()=>setShowSort(!showSort)} className='flex items-center relative  gap-2 bg-[var(--foreground)] px-3 py-1 rounded h-full max-[768px]:hidden '>
+        <span onClick={()=>setShowSort(!showSort)} className='flex items-center relative  gap-2 bg-[var(--foreground)] px-3 py-1 rounded h-full max-[620px]:flex max-[768px]:hidden '>
       <ArrowUpDown className="w-4 h-4 text-[var(--fileText)]" />
       <h2 className={`${!iconOnly && "max-[960px]:hidden"} !font-medium max-[830px]:hidden whitespace-nowrap`}>Sort by </h2>
      <span className='flex gap-3 justify-between items-center text-[var(--fileText)]'>
-      <h4 className={`${!iconOnly && "max-[900px]:hidden"} max-[830px]:hidden`}>{sortName} </h4>
-      <ChevronDown className='w-5 h-5 text-[var(--text)] max-[830px]:hidden' />
+      <h4 className={`max-[620px]:block ${!iconOnly && "max-[900px]:hidden"} max-[830px]:hidden `}>{sortName} </h4>
+   <ChevronDown  className={`w-5 h-5 text-[var(--text)] max-[830px]:hidden transition-all duration-150 ease-linear ${showSort && "rotate-180"}`} />
      </span>
        {showSort && 
        <>
                 <div
-                  className="absolute top-0  inset-0 z-10"
+                  className="fixed top-0  inset-0 z-10"
                   onClick={() => setShowSort(false)}
                 />
                 <div className="absolute right-0 top-full mt-2 bg-[var(--foreground)] rounded-lg shadow-lg py-1 z-20 min-w-[195px] animate-in fade-in-0 zoom-in-95 duration-100">
@@ -193,11 +198,11 @@ const page = () => {
                       <button
                         key={option.key}
                         onClick={() => setSortName(option.label)}
-                        className="w-full px-3 py-2.5 text-left text-sm hover:bg-blue-500 hover:text-white flex items-center justify-between group transition-colors"
+                        className=" w-full px-3 py-2.5 text-left  hover:bg-[var(--fileBox)] hover:text-white text-[var(--fileText)] flex items-center justify-between group transition-colors"
                       >
                         <div className="flex items-center gap-2">
                           <IconComponent className="w-4 h-4 text-[var(--text)] group-hover:text-[var(--text)]" />
-                          <span className="text-[var(--text)]">{option.label}</span>
+                          <span className="text-[var(--text)] text-sm">{option.label}</span>
                         </div>
                         
                       </button>
@@ -207,7 +212,7 @@ const page = () => {
               </>
       }
         </span>
-         <button onClick={()=>setUploadShow(!uploadShow)} className={`bg-[var(--foreground)] p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out flex gap-2 items-center`}><CloudUpload className="w-4 h-4" /><p className='max-[980px]:hidden'>Upload</p></button>
+         <button onClick={()=>setUploadShow(!uploadShow)} className={`bg-[var(--foreground)] p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out flex gap-2 items-center`}><CloudUpload className="w-4 h-4" /><p className='max-[620px]:block max-[980px]:hidden'>Upload</p></button>
          
         </span>
       </div>

@@ -2,9 +2,10 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { BriefcaseBusiness ,EthernetPort , ChevronDown,} from 'lucide-react'
-const ChatBotHistory = ({setChatID,activeChat=0}) => {
+const ChatBotHistory = ({setChatID,activeChat=0,setSearch,search}) => {
      const [ChatGroup,setChatGroup] = useState([]); 
      const [Caseactive,setCaseactive] = useState(0);
+       const [SearchHistory, setSearchHistory] = useState([]);
       const caseDeta = [
        {
          name: "Case Chats",
@@ -21,7 +22,7 @@ const ChatBotHistory = ({setChatID,activeChat=0}) => {
      ];
      useEffect(()=>{
             async function handleGroupChat(){
-               const res = await fetch("/api/chat",{
+               const res = await fetch("/api/chatbot",{
                  credentials : "include"
                })
                const data = await res.json()
@@ -46,6 +47,17 @@ const ChatBotHistory = ({setChatID,activeChat=0}) => {
          useEffect(()=>{
            setChatID(ChatGroup?.sort((a,b)=>new Date(a.lastUpdated) - new Date(b.lastUpdated))[ChatGroup.length-1]?.id)
          },[ChatGroup])
+          async function handleShistory(){
+    const res = await fetch("/api/chatbot/search/history",{
+      credentials : "include"
+    })
+    const data = await res.json()
+    if(!res.ok) return console.log(data.error)
+    setSearchHistory(data.data)
+  }
+  useEffect(()=>{
+    handleShistory()
+  },[])
   return (
    <div className='group-[.iconOnly]:hidden'>
         <ul className='grid'>
@@ -70,6 +82,9 @@ const ChatBotHistory = ({setChatID,activeChat=0}) => {
                 </li>
             ))}
         </ul>
+        {search && 
+ <ChatSearch setChatID={setChatID} setSearch={setSearch} SearchHistory={SearchHistory}/> 
+}
       </div>
   )
 }

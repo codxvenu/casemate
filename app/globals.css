@@ -24,14 +24,14 @@
     --label: whitesmoke;
     --background: #fafafa;
     --foreground: white;
-    --fileBox : #f8f8f8;
+    --fileBox : #F9FAFB;
     --text: #131313;
     --accent: white;
     --svgtxt: white;
     --border-table: #e5e5e5;
     --text_input: #1d1d1d6c;
     --border-color: #dedede;
-    --fileText : #8b8b8b;
+    --fileText : var(--color-gray-400);
     --purple: #6c63ff;
     --light_purple: #9292fd;
     --shimmer : rgba(0, 0, 0, 0.1);
@@ -59,7 +59,7 @@ small{
 body {
   background: var(--background);
   color: var(--text);
-  font-family: "Montserrat", sans-serif;
+  font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   scrollbar-width: 0px;
 }
 
