@@ -4,23 +4,10 @@ export async function GET(req){
     try {
         const user = await authMiddleware();
         if(!user) return Response.json({error : "user not authenticated"},{status : 401})
-        const[rows]= await db.query("select * from conversations where user1_id = ? or user2_id = ?",[user.id,user.id]);
-            const connectedUserIds = new Set();        
-            rows.forEach(chat => {
-                                    connectedUserIds.add(chat.user1_id);
-                                    connectedUserIds.add(chat.user2_id);
-                                    });
-        connectedUserIds.delete(user.id)    
-        const idarr = [...connectedUserIds]   
-        if (idarr.length === 0) {
-  return Response.json({ data: rows }, { status: 200 });
-}       
-        const[rows1]= await db.query("SELECT id, name, email, avatar FROM users WHERE id IN (?)",[idarr]);
-            const fullArr = rows.map((i)=> {
-             const elem =  rows1.find((j)=>j.id === i.user1_id || j.id === i.user2_id)
-             return {...i,...elem}
-            })
-            return Response.json({data :fullArr},{status : 200}); 
+        const [rows] = await db.query("SELECT c.id , c.user1_id,c.user2_id,c.last_message as lastMsg,c.updated_at as lastupdated,u.id AS other_user_id,u.name,u.email,u.avatar FROM conversations c JOIN users u ON u.id = CASE WHEN c.user1_id = ? THEN c.user2_id ELSE c.user1_id END WHERE c.user1_id = ? OR c.user2_id = ? order by c.updated_at DESC LIMIT 20",[user.id,user.id,user.id])
+        console.log(rows);
+        
+        return Response.json({data :rows},{status : 200}); 
         } catch (error) {
             return Response.json({error : error.message},{status : 400})
     }    

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import SendInvite from './Chat/SendInvite';
 
-const ChatBar = ({setReceiver}) => {
+const ChatBar = ({setReceiver,CheckDb,ActionIndexDb,CreateIndexDb}) => {
   const[activeState,setActiveState] = useState(0);
 const[ChatUsers,setChatUsers] = useState([]);
 const[SearchQuery,setSearchQuery] = useState("");
@@ -16,15 +16,33 @@ const[receiver_id,setReceiver_id] = useState(0)
   { id: "unseen", label: "Unseen" },
   { id: "lawyers", label: "Lawyers" },
 ];
+function handleDataSort(arr){
+  return arr.sort((a,b)=>new Date(b.lastupdated) - new Date(a.lastupdated))
+}
 async function handleChatUsers(){
-const res = await fetch("/api/chat/",{
-  credentials : "include"
+const result = await ActionIndexDb("chats",0)
+if(result === "Failed to read data") return console.log("Failed to read data");
+console.log(result,"fir");
+setChatUsers(handleDataSort(result));
+const res = await fetch("/api/chat/")
+const data = await res.json();
+if(!res.ok) return console.log(data.error);
+setChatUsers(handleDataSort(data.data))
+ActionIndexDb("chats",1,data.data)
+handleMessages(data.data)
+}
+async function handleMessages(arr){
+  if(!arr.length) return
+const conversations_ids = arr.map((i)=>i.id)
+const res = await fetch(`/api/chat/messages/`,{
+  headers : {"Content-Type" : "application/json"},
+  method : "POST",
+  body : JSON.stringify({conversations_ids})
 })
 const data = await res.json();
 if(!res.ok) return console.log(data.error);
-setChatUsers(data.data)
-console.log(data);
-
+console.log(data.data,"dar");
+ActionIndexDb("message",1,data.data)
 }
 async function handleSearch(query){
   setLoading(true)
@@ -35,7 +53,7 @@ const data = await res.json();
 if(!res.ok) return console.log(data.error);
 setSearchResult(data.data ?? [])
 console.log(data);
-setLoading(false)
+setLoading(false);
 }
 useEffect(()=>{
 if(!SearchQuery.trim()) return
@@ -44,6 +62,25 @@ const timer1 = setTimeout(() => {
 }, 500);
 return ()=>clearTimeout(timer1)
 },[SearchQuery])
+useEffect(()=>{
+  CreateIndexDb().then(exists=> exists ? handleChatUsers() : CreateIndexDb())
+},[])
+const formatTime12 = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date()
+    const d = (now - date) / (1000 * 60 * 60 * 24)
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    const StrTime = `${hours}:${minutes} ${ampm}`;
+    const StrDay = `${date.getDay()}`;
+    const StrYear = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+
+    return d < 1 ? StrTime: d < 7 ? StrDay: StrYear;
+    
+     ;
+  };
 const Chats = [
   {
     user: {
@@ -98,7 +135,7 @@ const Chats = [
 useEffect(()=>{
   setSearchQuery("")
   setSearchResult([])
-  handleChatUsers()
+  // handleChatUsers()
 },[receiver_id])
 
   return (
@@ -150,7 +187,7 @@ useEffect(()=>{
                 <h3 className='!text-[13px]'>{chat.name}</h3>
                 <p className='w-[99%] text-ellipsis overflow-hidden !text-[12px] whitespace-nowrap'>{chat.lastMsg}</p>
             </span>
-            <small className='absolute top-3 right-2'>{chat.lastupdated}</small>
+            <small className='absolute top-2 right-2'>{formatTime12(chat.lastupdated)}</small>
         </li>
       )}
     </ul>

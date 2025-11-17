@@ -11,8 +11,8 @@ import ChatRoom from "@/components/Chat/ChatRoom";
 const page = () => {
   const { user } = useContext(User);
   const { socket } = useContext(Socket);
-  console.log(user);
-
+  console.log(user?.id);
+  const [loading,setLoading] = useState(true)
   const [empty, setEmpty] = useState(false);
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
@@ -20,6 +20,7 @@ const page = () => {
   const [showBar, setShowBar] = useState(false);
   useEffect(() => {
     if (!socket || !user) return
+    setLoading(false)
     socket.emit("register", user.id);
     
 
@@ -34,12 +35,23 @@ const page = () => {
     
     
   }, [socket, user]);
+
+  async function init() {
+    const result = await ActionIndexDb("message",0,receiver.id)
+if(result === "Failed to read data") return console.log("Failed to read data");
+console.log(result,receiver.id);
+
+setChat(result);
+  }
+  useEffect(()=>{
+    init()
+  },[receiver])
   useEffect(()=>{
     if (!socket || !user) return
-    socket.emit("recent-message", {
-      sender: user.id,
-      receiver :  receiver.id
-    });
+    // socket.emit("recent-message", {
+    //   sender: user.id,
+    //   receiver :  receiver.other_user_id
+    // });
 socket.on("receive-recent-message", (msg) => {
       setChat(handleFormatChat(msg));
     });
@@ -51,9 +63,10 @@ socket.on("receive-recent-message", (msg) => {
     // emit 'send-message' to server
     const msg = {
       sender: user.id,
-      receiver: receiver.id, // example: sending to user 2
+      receiver: receiver.other_user_id, // example: sending to user 2
       message: message,
       created_at: now,
+      conver_id : receiver.id
     };
     socket.emit("send-message", msg);
 
@@ -87,7 +100,63 @@ socket.on("receive-recent-message", (msg) => {
       return { ...msg, showTime };
     });
   }
+ function CreateIndexDb() {
+  return new Promise((resolve)=>{
+    const req = indexedDB.open("casemate_chat", 1);
+    req.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains("message")) {
+        const store = db.createObjectStore("message", { keyPath: "id" });
+        store.createIndex("conversations_id", "conversations_id", { unique: false });
+      }
+      if (!db.objectStoreNames.contains("chats")) {
+        db.createObjectStore("chats", { keyPath: "id" });
+      }
+      let exists = db.objectStoreNames.contains("chats") && db.objectStoreNames.contains("message")
+      resolve(exists)
+    };
+    req.onsuccess = (event)=>{
+      const db = event.target.result;
+      let exists = db.objectStoreNames.contains("chats") && db.objectStoreNames.contains("message")
+      resolve(exists)
+    }
+  })
+}
 
+ async function ActionIndexDb(table,task,data){
+  // task 0 : readonly , task 1 : readwrite
+  return new Promise((resolve,reject)=>{
+   
+    const req = indexedDB.open("casemate_chat",1)
+    
+    req.onsuccess = (event)=>{
+      const db = event.target.result;
+      const tx = db.transaction(table,task ? "readwrite" : "readonly")
+      const store = tx.objectStore(table)
+     if(!task) {
+       let fdata = []
+       if(table === "chats"){
+         fdata = store.getAll()
+        }else {
+          const indexed = store.index("conversations_id")
+         fdata = indexed.getAll(data)}
+          fdata.onsuccess = () => {
+          resolve(fdata.result); // <-- REAL DATA
+        };
+        fdata.onerror = () => reject("Failed to read data");
+      } else if(task === 1) {
+        Array.isArray(data) ? data.forEach((i)=>store.put(i)) :    store.put(data)
+        resolve("updated")
+      }else{
+        reject("unkown task")
+      }
+    }
+    req.onerror = ()=>{
+      reject("failed to open schema")
+    }
+  })
+    
+  }
   return (
     <div className="flex bg-[var(--foreground)] gap-3">
       <SideBar
@@ -96,7 +165,7 @@ socket.on("receive-recent-message", (msg) => {
         atab={2}
         className={`${true ? "iconOnly shrinkWidth" : " growWidth"}`}
       />
-      <ChatBar showBar={showBar} setShowBar={setShowBar} atab={2} setReceiver={setReceiver}/>
+      <ChatBar showBar={showBar} setShowBar={setShowBar} atab={2} setReceiver={setReceiver} CreateIndexDb={CreateIndexDb} ActionIndexDb={ActionIndexDb} />
       <div className=" w-full overflow-hidden grid grid-rows-30 bg-[var(--fileBox)] h-screen relative ml-[-11px]">
         <div className=" p-4 pt-2 pb-0 flex justify-between z-50 rounded w-full fixed top-0 bg-[var(--foreground)] items-center">
           <li className="flex gap-2 items-center py-2 relative bg-[var(--foreground)] w-full px-1 rounded-sm">
@@ -115,15 +184,14 @@ socket.on("receive-recent-message", (msg) => {
             </span>
           </li>
         </div>
-        {chat && <ChatRoom chat={chat} />}
-
-        <div className="w-[96%] flex items-end justify-center gap-3 py-3 bg-[var(--background)] mx-auto row-span-2">
+        {!loading && chat && <ChatRoom chat={chat} />}
+        <div className="w-[96%] flex items-end justify-center gap-3 py-3 mx-auto row-span-2">
           <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
             <img src="mic.svg" alt="" />
           </button>
           <label
             htmlFor="message"
-            className="flex items-end p-4 shadow-2xl rounded-2xl w-full relative"
+            className="flex items-end p-4 shadow-2xl rounded-2xl bg-[var(--fileBox)] w-full relative"
           >
             <div
               contentEditable="true"
