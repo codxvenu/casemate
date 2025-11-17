@@ -18,7 +18,7 @@ const ChatRoom = ({ chat }) => {
     });
   }, [chat]);
   return (
-    <div className="chatroom mt-[80px] mb-[3rem] px-5 w-[100%] h-full mx-auto  row-span-28 bg-[var(--foreground)]">
+    <div className="chatroom mt-[70px] mb-[5rem] min-[680px]:px-5 px-2 w-[100%] h-fit mx-auto  row-span-28 bg-[var(--foreground)] max-[680px]:mb-[5rem]">
       {chat.map((i, index) =>
         i.sender === user.id ? (
           <Person

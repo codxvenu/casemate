@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import SendInvite from "./Chat/SendInvite";
 
-const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
+const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,setShowBar}) => {
   const [activeState, setActiveState] = useState(0);
   const [ChatUsers, setChatUsers] = useState([]);
   const [SearchQuery, setSearchQuery] = useState("");
@@ -24,6 +24,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
     const result = await ActionIndexDb("chats", 0);
     if (result === "Failed to read data")
       return console.log("Failed to read data");
+    
     setChatUsers(handleDataSort(result));
     const res = await fetch("/api/chat/");
     const data = await res.json();
@@ -140,7 +141,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
   }, [receiver_id]);
 
   return (
-    <div className="py-4 bg-[var(--fileBox)] w-[260px] shrink-0 -ml-4">
+    <div className={`py-1 bg-[var(--fileBox)] w-[260px] h-screen shrink-0 top-0 max-[568px]:fixed min-[768px]:-ml-4 z-[1000000] left-16 ${!showBar && "!hidden"}`}>
       <span className="flex p-3 bg-[var(--foreground)] m-2 rounded-xl items-center relative ">
         <input
           type="text"
@@ -152,7 +153,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
         <Search className="w-4 h-4" />
         {SearchResult.length !== 0 && !loading ? (
           <span
-            className={`flex bg-[var(--foreground)] items-start p-3 justify-start flex-col absolute top-[55px] left-0 w-[244px] h-[140px] z-[1000] ${
+            className={`flex bg-[var(--foreground)] items-start p-3 justify-start flex-col absolute top-[55px] left-0 w-[244px] min-w-[140px] h-fit z-[1000] ${
               !SearchQuery.trim() && "!hidden"
             }`}
           >
@@ -177,7 +178,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
               </span>
             )}
             {SearchResult.notConnected.length !== 0 && (
-              <h3 className="!text-[12px]">Global Search</h3>
+              <h3 className="!text-[12px] my-2">Global Search</h3>
             )}
             {SearchResult.notConnected.length !== 0 &&
               SearchResult.notConnected?.map((s, index) => (
@@ -202,7 +203,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
           </span>
         ) : (
           <span
-            className={`flex bg-[var(--foreground)]  items-center justify-center absolute top-[55px] left-0 w-[244px] h-[140px] ${
+            className={`flex z-[1000] bg-[var(--foreground)]  items-center justify-center absolute top-[55px] left-0 w-[244px] h-[140px] ${
               !SearchQuery.trim() && "!hidden"
             }`}
           >
@@ -230,7 +231,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb }) => {
           <li
             key={index}
             className="flex gap-2 items-center py-2 relative bg-[var(--foreground)] w-full px-1 rounded-sm"
-            onClick={() => setReceiver(chat)}
+            onClick={() => {setReceiver(chat);setShowBar(!showBar)}}
           >
             <Image
               src={`${chat.avatar}`}

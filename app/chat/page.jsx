@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useContext } from "react";
-import { Columns2, Search } from "lucide-react";
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { ArrowLeft, Columns2, Search } from "lucide-react";
 import Person from "@/components/person";
 import { User } from "../context/UserContext";
 import { Socket } from "../context/SocketContext";
@@ -18,6 +18,7 @@ const page = () => {
   const [chat, setChat] = useState([]);
   const [receiver, setReceiver] = useState(0);
   const [showBar, setShowBar] = useState(false);
+  const TextRef = useRef(null)
   useEffect(() => {
     if (!socket || !user) return
     setLoading(false)
@@ -76,7 +77,8 @@ socket.on("receive-recent-message", (msg) => {
       return [...prev.slice(0, -1), ...data];
     });
     setMessage(""); // clear input
-    document.getElementById("sendtxt").innerText = "";
+
+    TextRef.current.innerText = "";
   };
   function handleFormatChat(msgs) {
     if (!msgs) return [];
@@ -158,16 +160,22 @@ socket.on("receive-recent-message", (msg) => {
     
   }
   return (
-    <div className="flex bg-[var(--foreground)] gap-3">
+    <div className="flex bg-[var(--foreground)] min-[768px]:gap-3 justify-center">
       <SideBar
         showBar={showBar}
         setShowBar={setShowBar}
         atab={2}
         className={`${true ? "iconOnly shrinkWidth" : " growWidth"}`}
       />
-      <ChatBar showBar={showBar} setShowBar={setShowBar} atab={2} setReceiver={setReceiver} CreateIndexDb={CreateIndexDb} ActionIndexDb={ActionIndexDb} />
-      <div className=" w-full overflow-hidden grid grid-rows-30 bg-[var(--fileBox)] h-screen relative ml-[-11px]">
-        <div className=" p-4 pt-2 pb-0 flex justify-between z-50 rounded w-full fixed top-0 bg-[var(--foreground)] items-center">
+      <ChatBar showBar={showBar} setShowBar={setShowBar} atab={2} setReceiver={setReceiver} CreateIndexDb={CreateIndexDb} ActionIndexDb={ActionIndexDb}/>
+      <div className=" w-full grid grid-rows-12 bg-[var(--fileBox)] relative ml-[-11px] h-screen" >
+        <div className=" p-4 pt-2 pb-0 flex justify-between z-50 rounded w-full fixed top-0 bg-[var(--foreground)] items-center row-span-10">
+          <button
+                          className={`p-2 px-2 bg-[var(--foreground)] mr-2`}
+                          onClick={() => setShowBar(!showBar)}
+                        >
+                        <ArrowLeft className="  w-4 h-4" />
+                        </button>
           <li className="flex gap-2 items-center py-2 relative bg-[var(--foreground)] w-full px-1 rounded-sm">
             <Image
               src={`${receiver?.avatar ?? 'https://dummyjson.com/icon/sophiab/128'}`}
@@ -184,8 +192,10 @@ socket.on("receive-recent-message", (msg) => {
             </span>
           </li>
         </div>
+        <div className="overflow-scroll w-full h-full row-span-12 bg-[var(--foreground)]" style={{scrollbarWidth : "none"}}>
         {!loading && chat && <ChatRoom chat={chat} />}
-        <div className="w-[96%] flex items-end justify-center gap-3 py-3 mx-auto row-span-2">
+        </div>
+        <div className="w-[1200px] flex items-end justify-center gap-3 py-3 mx-auto row-span-2 fixed bottom-0 max-[680px]:left-1/2 max-[680px]:-translate-x-1/2">
           <button className="w-[45px] h-[45px] bg-black text-[var(--text)] shrink-0 flex items-center justify-center rounded-2xl">
             <img src="mic.svg" alt="" />
           </button>
@@ -193,15 +203,21 @@ socket.on("receive-recent-message", (msg) => {
             htmlFor="message"
             className="flex items-end p-4 shadow-2xl rounded-2xl bg-[var(--fileBox)] w-full relative"
           >
-            <div
-              contentEditable="true"
-              id="sendtxt"
-              onInput={(e) => {
-                e.target.innerText === "" ? setEmpty(false) : setEmpty(true);
-                setMessage(e.target.innerText);
-              }}
-              className="w-full outline-none peer"
-            ></div>
+           <div
+      contentEditable
+      className="w-full outline-none peer"
+      ref={TextRef}
+      onInput={(e) => {
+        const text = e.target.innerText;
+        setMessage(text);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault(); // Prevent new line
+          sendMessage();
+        }
+      }}
+    />
             <small
               className={`absolute ${
                 empty ? "hidden" : "peer-focus:hidden"
@@ -210,7 +226,7 @@ socket.on("receive-recent-message", (msg) => {
               Write now...
             </small>
             {/* <textarea type="text" placeholder='Write now...' className='outline-none resize-none w-full h-auto' rows={1}  style={{scrollbarWidth : "none"}} /> */}
-            <button onClick={sendMessage}>
+            <button onClick={()=>sendMessage}>
               <img src="send.svg" alt="" />
             </button>
           </label>

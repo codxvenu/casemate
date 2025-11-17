@@ -42,7 +42,7 @@ const SideBar = ({className,showBar,setShowBar,atab=0,setChatID,search,setSearch
   return (
 <div className={`${!showBar && "max-[768px]:hidden"}`}>
 
-    <div className={className+`  ${inter.className} group  max-[768px]:fixed top-0  bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 z-[100000000]`}>
+    <div className={className+`  ${inter.className} group  max-[768px]:fixed top-0  bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 z-[1000000000000]`}>
         <div className='flex justify-between items-center gap-2 p-1 rounded-md h-min '>
       <span className='flex justify-between items-center gap-3 py-1 rounded-md h-min !text-[14px] text-[var(--text)]'>
         <button className='p-2 bg-blue-600 shadow rounded-md text-[var(--svgtxt)]'>
