@@ -22,8 +22,6 @@ const page = () => {
     if (!socket || !user) return
     setLoading(false)
     socket.emit("register", user.id);
-    
-
     socket.on("receive-message", (msg) => {
       setChat((prev) => {
         const data = prev[prev.length - 1]
@@ -100,6 +98,8 @@ socket.on("receive-recent-message", (msg) => {
       return { ...msg, showTime };
     });
   }
+  useEffect(()=>console.log(receiver,"receiverdata")
+  ,[receiver])
  function CreateIndexDb() {
   return new Promise((resolve)=>{
     const req = indexedDB.open("casemate_chat", 1);
