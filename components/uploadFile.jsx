@@ -3,10 +3,13 @@ import {React,useContext,useEffect,useState} from 'react'
 import { Upload,FolderPlus,X } from 'lucide-react'
 import { User } from '@/app/context/UserContext';
 import Loader from './loader';
+import { toast } from 'react-toastify';
+import { useApi } from '@/hook/apifetch';
 const UploadFile = ({setUploadShow,handleFiles}) => {
   const [isDragging,setDragging] = useState(false);
   const [loading,setLoading] = useState(false);
   const {user} = useContext(User);
+  const {apiFetch} = useApi();
   useEffect(()=>{console.log(user);
   },[user])
   async function handleUpload(upload){
@@ -20,20 +23,11 @@ const UploadFile = ({setUploadShow,handleFiles}) => {
           console.log(now);
           
           formData.append("time",now)
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`,{
+          const data = await apiFetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`,{
             method: "POST",
-            body : formData,
-            credentials :"include"
-          });
-          console.log(upload);
-          
-          const data = await res.json();
-          if(!res.ok){ 
-            setLoading(false); 
-            setDragging(false); 
-            setUploadShow(false); 
-            console.log(data.error) 
-          }
+            body : formData
+          })
+          toast.success(data.message ?? "File Uploaded")
           await handleFiles()
           setLoading(false)
           setDragging(false)

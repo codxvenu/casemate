@@ -23,7 +23,6 @@ const ThemeContext = ({children}) => {
     const right = window.innerWidth - left;
     const bottom = window.innerHeight - top;
 
-    // Correct full-screen radius based on farthest corner
     const radius = Math.hypot(Math.max(x, right), Math.max(y, bottom));
   
     transition.ready.then(() => {

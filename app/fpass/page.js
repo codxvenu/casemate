@@ -2,17 +2,18 @@
 import React, { useState } from 'react'
 import { Mail } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
+import { useApi } from '@/hook/apifetch'
 const page = () => {
   const [email , setEmail] = useState("")
+  const{apiFetch} = useApi()
   const handleFpass = async()=>{
-    const res = await fetch('/api/auth/fpass',{
+    const data = await apiFetch('/api/auth/fpass',{
       method : "POST",
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email})
     })
-    const data = await res.json();
-    if(!res.ok) return alert(data.error);
-    alert(data.message);
+    toast.success(data.message ?? "Email Sent on mail")
     }
     return (
     <div className='overflow-hidden h-[80vh] px-4 pt-20'>

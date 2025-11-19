@@ -10,7 +10,7 @@ export async function POST(req) {
     const pass = await bcrypt.hash(user.password,10);
     const [rows] = await db.query("insert into users(name,email,phone,password) values(?,?,?,?)", [user.name,user.email,user.phone,pass]);
     if (rows.length == 0) return Response.json({  error: "email or password wrong" },{status: 400,});
-    const token = jwt.sign({user:user.email,id : rows.insertId},"helloworld",{expiresIn:"1h"})
+    const token = jwt.sign({user:user.email,id : rows.insertId},process.env.JWT_SECRET,{expiresIn:"1h"})
     req.cookies.set("token",token,{httpOnly: true,
     secure: true,
     sameSite: "None",

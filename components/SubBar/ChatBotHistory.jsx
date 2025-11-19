@@ -2,10 +2,12 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { BriefcaseBusiness ,EthernetPort , ChevronDown,} from 'lucide-react'
+import { useApi } from '@/hook/apifetch';
 const ChatBotHistory = ({setChatID,activeChat=0,setSearch,search}) => {
      const [ChatGroup,setChatGroup] = useState([]); 
      const [Caseactive,setCaseactive] = useState(0);
        const [SearchHistory, setSearchHistory] = useState([]);
+       const {apiFetch} = useApi();
       const caseDeta = [
        {
          name: "Case Chats",
@@ -34,25 +36,18 @@ const ChatBotHistory = ({setChatID,activeChat=0,setSearch,search}) => {
        async function handlenewchat(index){
              setChatID(0);
              const now = new Date();
-              const res = await fetch(`/api/newchat`,{
-                 credentials : "include",
+              const res = await apiFetch(`/api/newchat`,{
                  method : "POST",
                  headers : {"Content-Type" : "application/json"},
                  body : JSON.stringify({created_at : now,index})
                })
-               const data = await res.json()
-               if(!res.ok) return console.log(data)
                setChatID(data.id)
              }
          useEffect(()=>{
            setChatID(ChatGroup?.sort((a,b)=>new Date(a.lastUpdated) - new Date(b.lastUpdated))[ChatGroup.length-1]?.id)
          },[ChatGroup])
           async function handleShistory(){
-    const res = await fetch("/api/chatbot/search/history",{
-      credentials : "include"
-    })
-    const data = await res.json()
-    if(!res.ok) return console.log(data.error)
+    const data = await apiFetch("/api/chatbot/search/history")
     setSearchHistory(data.data)
   }
   useEffect(()=>{

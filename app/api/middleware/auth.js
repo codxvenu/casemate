@@ -5,7 +5,7 @@ export async function authMiddleware(req){
         const store = await cookies();
         const token = store.get("token").value;
         if(!token) return null;
-        const user = jwt.verify(token,"helloworld")
+        const user = jwt.verify(token,process.env.JWT_SECRET)
         console.log(user,"usersslksasda");
         
         return user;

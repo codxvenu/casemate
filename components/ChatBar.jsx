@@ -2,6 +2,7 @@ import { Search } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import SendInvite from "./Chat/SendInvite";
+import { useApi } from "@/hook/apifetch";
 
 const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,setShowBar}) => {
   const [activeState, setActiveState] = useState(0);
@@ -10,6 +11,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,s
   const [loading, setLoading] = useState(false);
   const [SearchResult, setSearchResult] = useState([]);
   const [receiver_id, setReceiver_id] = useState(0);
+  const {apiFetch} = useApi();
   const chatFilters = [
     { id: "all", label: "All" },
     { id: "unseen", label: "Unseen" },
@@ -26,9 +28,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,s
       return console.log("Failed to read data");
     
     setChatUsers(handleDataSort(result));
-    const res = await fetch("/api/chat/");
-    const data = await res.json();
-    if (!res.ok) return console.log(data.error);
+    const data = await apiFetch("/api/chat/");
     setChatUsers(handleDataSort(data.data));
     ActionIndexDb("chats", 1, data.data);
     handleMessages(data.data);
@@ -36,23 +36,16 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,s
   async function handleMessages(arr) {
     if (!arr.length) return;
     const conversations_ids = arr.map((i) => i.id);
-    const res = await fetch(`/api/chat/messages/`, {
+    const data = await apiFetch(`/api/chat/messages/`, {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify({ conversations_ids }),
     });
-    const data = await res.json();
-    if (!res.ok) return console.log(data.error);
-    console.log(data.data, "messages data");
     ActionIndexDb("message", 1, data.data);
   }
   async function handleSearch(query) {
     setLoading(true);
-    const res = await fetch(`/api/chat/search/${query}`, {
-      credentials: "include",
-    });
-    const data = await res.json();
-    if (!res.ok) return console.log(data.error);
+    const data = await apiFetch(`/api/chat/search/${query}`);
     setSearchResult(data.data ?? []);
     console.log(data);
     setLoading(false);

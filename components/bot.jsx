@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import { Share2 , Clipboard,Check} from 'lucide-react'
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
+import { useApi } from '@/hook/apifetch';
 const Bot = ({text ,id, error}) => {
   const [copied,setCopied] = useState(false);
   const [showlink,setShowLink] = useState(false);
+  const {apiFetch} = useApi();
   const handleShareLink = async()=>{
-    const res = await fetch(`/api/share/${id}`);
-    const data = await res.json();
-    console.log(data);
-    if (!res.ok) return alert("Something went wrong");
-    
+    const data = await apiFetch(`/api/share/${id}`);
     return data.shareID
   }
 const shareOptions = [

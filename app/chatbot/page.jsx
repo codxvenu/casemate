@@ -8,6 +8,7 @@ import { User } from "../context/UserContext";
 import SideBar from "@/components/sideBar";
 import ChatSearchPopup from "@/components/ChatSearch";
 import ChatBotLoading from "@/components/Loadings/ChatBotLoading";
+import { useApi } from "@/hook/apifetch";
 const page = () => {
   const [chat, setChats] = useState([]);
   const [chatID, setChatID] = useState(0);
@@ -19,8 +20,8 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
-   const [search,setSearch] = useState(false);
-  
+  const [search,setSearch] = useState(false);
+  const {apiFetch} = useApi();
   useEffect(() => {
     if (!socket || !user) return;
     console.log(user, user.id);
@@ -136,24 +137,32 @@ const page = () => {
     });
   }
  
-  useEffect(()=>{
-    if(chatID === 0) return setChats([]);
-    console.log("search hit");
-    setLoading(true)
-    setChats([])
-   async function handleChat(){
-      const res = await fetch(`/api/chatbot/${chatID}`,{
-        credentials : "include"
-      })
-      const data = await res.json();
-      if(!res.ok) return alert(data.error)
-      setChats([...data.data]);
-    console.log(data.data);
-    
-      setTimeout(()=>setLoading(false),1000)
+  useEffect(() => {
+  let isMounted = true; // to prevent state update after unmount
+
+  async function loadChats() {
+    if (chatID === 0) {
+      setChats([]);
+      return;
     }
-    handleChat()
-  },[chatID])
+    setLoading(true);
+    setChats([]);
+    const data = await apiFetch(`/api/chatbot/${chatID}`);
+    if (!data) {
+      setLoading(false);
+      return;
+    }
+    if (isMounted) {
+      setChats(data.data || []);
+      setLoading(false);
+    }
+  }
+  loadChats();
+  return () => {
+    isMounted = false;
+  };
+}, [chatID]);
+
   return (
         <div className="flex bg-[var(--foreground)] gap-3">
           <SideBar

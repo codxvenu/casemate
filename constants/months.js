@@ -1,0 +1,15 @@
+export const months = [
+  {},
+  { id: 1, monthName: "January", Days: 31 },
+  { id: 2, monthName: "February", Days: 28 },
+  { id: 3, monthName: "March", Days: 31 },
+  { id: 4, monthName: "April", Days: 30 },
+  { id: 5, monthName: "May", Days: 31 },
+  { id: 6, monthName: "June", Days: 30 },
+  { id: 7, monthName: "July", Days: 31 },
+  { id: 8, monthName: "August", Days: 31 },
+  { id: 9, monthName: "September", Days: 30 },
+  { id: 10, monthName: "October", Days: 31 },
+  { id: 11, monthName: "November", Days: 30 },
+  { id: 12, monthName: "December", Days: 31 },
+];
