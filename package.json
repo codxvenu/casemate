@@ -35,7 +35,7 @@
     "socket.io-client": "^4.8.1",
     "ssh2-sftp-client": "^12.0.1",
     "word-extractor": "^1.0.4",
-    "zod": "^4.1.12"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
