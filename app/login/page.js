@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Loader from '@/components/loader'
 import { toast } from 'react-toastify'
-import { authService, useApi } from '@/hook/apifetch'
+import { authService } from '@/hook/apifetch'
 import { Validator } from '@/utility/lib/validator'
 import { LoginSchema } from '@/schemas/authSchema'
 const page = () => {

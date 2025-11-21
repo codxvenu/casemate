@@ -1,7 +1,7 @@
 "use client";
 import SideBar from "@/components/sideBar";
 import Stat from "@/components/dashboard/stat";
-import { Columns2, DoorOpen, UserRoundCheck,Bell,Trash2, ChevronRight, ChevronLeft, Plus, UserRoundX } from "lucide-react";
+import { Columns2, DoorOpen, UserRoundCheck,Bell,Trash2, ChevronRight, ChevronLeft, Plus, UserRoundX, Search } from "lucide-react";
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import Loader from "@/components/loader";
@@ -10,7 +10,8 @@ import { toast } from "react-toastify";
 import { dashboardService } from "@/hook/apifetch";
 import Calandar from "@/components/dashboard/calandar";
 import Notices from "@/components/dashboard/notices";
-import Dialogue from "@/components/dashboard/Dialogue";
+import ChatReq from "@/components/dashboard/ChatReq";
+import Header from "@/components/Header";
 const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
@@ -58,85 +59,65 @@ async function handleRequest(action,i) {
 }
 //const notices = notice?.filter((i)=>ConvertDate(i.fortime).day === SearchDate.day && ConvertDate(i.fortime).month === SearchDate.month.id && ConvertDate(i.fortime).year === SearchDate.year)
   return (
-    <div className={`flex max-h-screen overflow-x-clip overflow-scroll `} style={{scrollbarWidth : "none"}}>
+    <div className={`flex h-screen overflow-clip `} >
       <SideBar
         showBar={showBar}
         setShowBar={setShowBar}
         atab={0}
-        className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`}
+        iconOnly={iconOnly}
+        setIconOnly={setIconOnly}
       />
       {loading ? <div className="flex items-center justify-center w-full h-screen">
       <Loader/>
       </div> : 
-      <div className="bg-[var(--fileBox)] w-screen h-screen flex flex-col">
-        {/* header */}
-        <div className="flex justify-between px-2 py-3 bg-[var(--foreground)] rounded mt-3 mb-2 max-h-[55px] max-[680px]:mt-0 max-[680px]:w-full max-[680px]:fixed top-0 z-[1000]">
-          <button
-            className="p-2 px-3 hover:bg-[var(--fileBox)] mr-2 max-[768px]:hidden rounded-md"
-            onClick={() => setIconOnly(!iconOnly)}
-          >
-            <Columns2 className="w-4 h-4" />
-          </button>
-          <button
-            className="p-2 px-3 hover:bg-[var(--fileBox)] mr-2 min-[768px]:hidden rounded-md"
-            onClick={() => setShowBar(!showBar)}>
-            <Columns2 className="w-4 h-4" />
-          </button>
-          <div className="flex gap-2 items-center flex-row-reverse w-full mr-3">
-            <span className="bg-[var(--fileBox)] flex w-8 h-8 rounded-full items-center justify-center">N</span>
-            <span onClick={()=>setShowBell(!showBell)} className="bg-[var(--fileBox)] flex w-8 h-8 rounded-full items-center justify-center relative"><span className="absolute -top-[.5rem] -right-4 bg-[var(--text)] text-[var(--foreground)] p-2 rounded-full w-8 h-5 flex items-center justify-center">
-              <small >20+</small>
-              </span>
-               <Bell className="w-4 h-4"/>
-               {showBell && 
-                <Dialogue handleRequest={handleRequest} Dashboard={Dashboard} setShowBell={setShowBell}/>
-               }
-               </span>
-          </div>
-        </div>
-        <div className="grid max-[600px]:flex flex-col max-[680px]:mt-[45px] grid-cols-[repeat(auto-fit,minmax(250px,.5fr))] grid-rows-auto p-3 gap-3">
+      <div className="bg-[var(--fileBox)] w-screen h-screen flex flex-col overflow-x-hidden overflow-y-scroll" style={{scrollbarWidth : "none"}}>
+        <div className="grid max-[1170px]:flex flex-col min-[550px]:grid-cols-[repeat(auto-fit,minmax(275px,.5fr))] min-[780px]:mr-3 mt-3 h-fit mb-4">
+        <div className=" max-[768px]:w-screen col-span-3 grid max-[600px]:flex flex-col  grid-cols-[repeat(auto-fit,minmax(250px,.5fr))] grid-rows-auto p-3 gap-3">
        <Stat stat={Dashboard?.stat ?? []}/>
        <Calandar/> 
-       <Notices iconOnly={iconOnly} setShownote={setShownote} shownote={shownote}/>
-        </div>
-        <div className="max-[425px]:flex flex-col grid max-[680px]:grid-rows-1 max-[1024px]:grid-cols-3 grid-cols-4 max-[768px]:grid-rows-11 grid-rows-2 gap-2 h-max mb-6">
-       {/* cases */}
-          <div className={`px-2 py-2 bg-[var(--fileBox)] col-span-3 max-[680px]:row-span-0 max-[768px]:row-span-4`}>
-            <div className="px-2 py-3 h-[100%] rounded overflow-x-scroll" style={{scrollbarWidth : "none"}}>
-              <table className="bg-[var(--foreground)] !w-max min-w-full shadow-sm">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Last updated</th>
-                    <th>Status</th>
-                    <th>Quick Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {history.length !== 0 && history.map((i,index)=>(
-                  <tr key={index}>
-                    <td>{i?.Title}</td>
-                    <td>{i?.Category}</td>
-                    <td>{i?.updated}</td>
-                    <td>{i?.status === 'active' ? <span className="text-green-500">Ongoing</span> : i?.status === 'closed' ? <span className="text-red-500">Closed</span> : <span className="text-red-500">Pending Hearing</span>}</td>
-                    <td className="flex  gap-2 justify-center items-center"><span className="bg-black p-1 text-white flex items-center justify-center w-fit rounded-xl"><DoorOpen className="w-4 h-4" /></span> <span className="bg-black p-1 text-white flex items-center justify-center w-fit rounded-xl"><Trash2 className="w-4 h-4" /></span></td>
-                  </tr>
-                  ))}
-                  {history.length === 0 && <tr>
-                    <td></td>
-                    <td></td>
-                    <td>No history Found</td>
-                    </tr>}
-                </tbody>
-              </table>
-            </div>
+       <div className="col-span-4 w-full"></div>
+       {/* <Notices iconOnly={iconOnly} setShownote={setShownote} shownote={shownote}/> */}
+          <div className="col-span-4 p-2 m-2  h-full">
+          <h2 className="font-semibold mb-3">Notices & Reminder</h2>
+          <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
+          <ul className="grid grid-cols-4 gap-2 w-max">
+            <li className="max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <small className="text-[var(--fileText)]">Sept 22,2024</small>
+            <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            </li>
+            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <small className="text-[var(--fileText)]">Sept 22,2024</small>
+            <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            </li>
+            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <small className="text-[var(--fileText)]">Sept 22,2024</small>
+            <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            </li>
+            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <small className="text-[var(--fileText)]">Sept 22,2024</small>
+            <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            </li>
+          </ul>
           </div>
-          {/* cases */}
-          {/* quick action */}
-         
-            {/* quick action */}
         </div>
+        </div>
+       <div className={`w-full h-full py-4 px-2.5 max-[768px]:w-screen max-[768px]:pt-0 max-[768px]:max-h-[482px] grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] min-[1195px]:col-span-[span 4] gap-2 ${!iconOnly ? "max-[1353px]:col-span-4" : "max-[1170px]:col-span-4"}`}>
+        <div className="shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[250px] w-full min-w-full max-w-full">
+        <span className="block relative shadow-sm border-[1px] border-gray-100 px-1 rounded-md mb-2">
+        <input type="text" placeholder="Search" className="px-7 py-1.5 outline-0"/>
+        <Search className="w-4 h-4 absolute top-2.5 left-2"/>
+        </span>
+        <ChatReq handleRequest={handleRequest} chatRequests={Dashboard?.chatRequests}/>
+        </div>
+        <div className=" shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[250px] ">
+        <h2 className="font-medium">Quick Reminder</h2>
+        <ul className="flex items-center justify-start mt-2.5">
+          <li className="flex gap-2 items-center relative w-full"><input type="checkbox" name="reminder" id="" /><h3>Rajus wife</h3> <small className="absolute top-[2.5px] right-1 text-[var(--fileText)]">Sep 22 ,2025</small></li>
+        </ul>
+        </div>
+       </div>
+        </div>
+     
       </div>
       }
       {shownote && 

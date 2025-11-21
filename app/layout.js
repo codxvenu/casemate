@@ -2,10 +2,11 @@
 import SocketContext from "./context/SocketContext";
 import UserContext from "./context/UserContext";
 import "./globals.css";
-import { Inter, Montserrat } from 'next/font/google';
+import { Inter, Geist } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import ThemeContext from "./context/ThemeContext";
-export const inter = Inter({
+import SideBar from "@/components/sideBar";
+export const inter = Geist({
   subsets: ['latin'],       // required
   weight: ['100','200','300','400','500','600','700','800','900'],   // import only the weights you need
   display: 'swap',          // avoids invisible text
@@ -23,8 +24,7 @@ export default function RootLayout({ children }) {
           <ThemeContext>
           <SocketContext>
         <UserContext>
-        
-          
+         
         {children}
         <ToastContainer/>
         </UserContext>

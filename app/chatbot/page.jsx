@@ -8,7 +8,7 @@ import { User } from "../context/UserContext";
 import SideBar from "@/components/sideBar";
 import ChatSearchPopup from "@/components/ChatSearch";
 import ChatBotLoading from "@/components/Loadings/ChatBotLoading";
-import { useApi } from "@/hook/apifetch";
+import { ChatBotService } from "@/hook/apifetch";
 const page = () => {
   const [chat, setChats] = useState([]);
   const [chatID, setChatID] = useState(0);
@@ -21,7 +21,6 @@ const page = () => {
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
   const [search,setSearch] = useState(false);
-  const {apiFetch} = useApi();
   useEffect(() => {
     if (!socket || !user) return;
     console.log(user, user.id);
@@ -147,7 +146,7 @@ const page = () => {
     }
     setLoading(true);
     setChats([]);
-    const data = await apiFetch(`/api/chatbot/${chatID}`);
+    const data = await ChatBotService.getChatById(chatID);
     if (!data) {
       setLoading(false);
       return;

@@ -1,21 +1,18 @@
 import React from 'react'
 import Image from 'next/image'
 import { UserRoundX,UserRoundCheck } from 'lucide-react'
-const Dialogue = ({Dashboard,handleRequest,setShowBell}) => {
+const ChatReq = ({chatRequests,handleRequest}) => {
   return (
-     <div className=" bg-[var(--foreground)] col-span-1 max-[1024px]:hidden absolute top-8 right-0 w-[300px] h-[250px]" >
-        <div className='fixed top-0 w-screen h-screen z-[10] inset-0' onClick={()=>setShowBell(false)}></div>
-            <div className=" p-3 h-[100%] rounded">
-              <ul className="flex flex-col justify-center items-start gap-1">
-                {Dashboard?.chatRequests?.map((i,index) => (
+    <ul className="flex flex-col justify-center items-start gap-1 mt-3.5">
+                {chatRequests?.map((i,index) => (
                   <li
-                    className="flex justify-between border-b-2 px-2 py-2 border-[var(--fileBox)] gap-2 bg-[var(--fileBox)] w-full items-center"
+                    className="flex justify-between border-b-2 px-2 py-2 border-[var(--fileBox)] shadow-md gap-2 bg-[var(--background)] w-full items-center"
                     key={index}
                   >
                     <span className="flex gap-1">
                     <Image src={`${i.avatar || ""}`} width={30} height={30} alt={i.name} className="rounded-full"/>
                     <span className={` flex flex-col items-start justify-center text-[13px] text-[var(--fileText)]`}>
-                      <h2 className="text-[var(--text)]">{i.name}</h2>{" "}
+                      <h2 className="text-[var(--text)] overflow-hidden text-ellipsis whitespace-nowrap w-[140px]">{i.name}</h2>{" "}
                       <p className="!text-[12px]">Wants to chat</p>
                     </span>
                     </span>
@@ -30,9 +27,7 @@ const Dialogue = ({Dashboard,handleRequest,setShowBell}) => {
                   </li>
                 ))}
               </ul>
-            </div>
-          </div>
   )
 }
 
-export default Dialogue
+export default ChatReq

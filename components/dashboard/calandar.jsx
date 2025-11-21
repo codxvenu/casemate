@@ -32,7 +32,7 @@ const Calandar = () => {
     console.log(currentDate);
   }, [currentDate]);
   return (
-    <div className="bg-[var(--foreground)] p-3 rounded-xl  row-span-2  shadow-sm">
+    <div className="bg-[var(--foreground)] p-3 rounded-xl  row-span-2 shadow-sm">
       <span className="flex justify-between items-center text-[14px] mb-2 text-center">
         <span
           className="max-[768px]:p-1  p-2 hover:bg-[var(--fileBox)] rounded-md"

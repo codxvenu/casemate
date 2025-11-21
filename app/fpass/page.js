@@ -3,10 +3,8 @@ import React, { useState } from 'react'
 import { Mail } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
-import { useApi } from '@/hook/apifetch'
 const page = () => {
   const [email , setEmail] = useState("")
-  const{apiFetch} = useApi()
   const handleFpass = async()=>{
     const data = await apiFetch('/api/auth/fpass',{
       method : "POST",

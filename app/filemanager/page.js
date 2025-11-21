@@ -11,10 +11,10 @@ import GridView from '@/components/gridView'
 import ListView from '@/components/listView'
 import Loader from '@/components/loader'
 import SideBar from '@/components/sideBar'
-import { useApi } from '@/hook/apifetch'
+import { FileService } from '@/hook/apifetch'
 import { toast } from 'react-toastify'
 const page = () => {
-    const user = useContext(User);
+    const {user} = useContext(User);
     const [upload,setUpload] = useState(null);
     const [showBar,setShowBar] = useState(false);
     const [sortName,setSortName] = useState("Name");
@@ -27,10 +27,9 @@ const page = () => {
     const [files,setFiles] = useState(false);
     const [iconOnly,setIconOnly] = useState(false);
     const[showOptions,setShowOptions] = useState(false)
-    const {apiFetch} = useApi()
     async function handleFiles(){
      if(!user.user?.id) return
-       const data = await apiFetch(`/api/files`)
+       const data = await FileService.getFiles();
        setFiles(data.files)
        setLoading(false)
      }
@@ -62,21 +61,13 @@ const page = () => {
     }
     async function ShareFile(file) {
       setLoading(true)
-      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/Share/`,{
-        method : "POST",
-        headers : {"Content-Type"  : "application/json"},
-        body : JSON.stringify({file , userId : user.user?.id})
-      })
+      const data = await FileService.share({file , userId : user.user?.id})
       toast.success(data.message ?? "File Shared")
       setLoading(false)
     }
     async function RenameFile(file,filename) {
       setLoading(true)
-      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/rename`,{
-        method : "PUT",
-        headers : {"Content-Type"  : "application/json"},
-        body : JSON.stringify({oldName : file.filename , newName : filename,userId : user.user?.id})
-      })
+      const data = await FileService.rename({oldName : file.filename , newName : filename,userId : user.user?.id})
       toast.success(data.message ?? "File renamed")
       setLoading(false)
       handleFiles()
@@ -85,9 +76,7 @@ const page = () => {
     }
     async function DeleteFile(file) {
       setLoading(true)
-      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delete/${user.user.id}/${file.filename}`,{
-        method : "DELETE"
-      })
+      const data = await FileService.delete(user.id,file.filename)
       toast.success(data.message ?? "File Deleted")
       setLoading(false)
       handleFiles()

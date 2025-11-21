@@ -2,12 +2,11 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { BriefcaseBusiness ,EthernetPort , ChevronDown,} from 'lucide-react'
-import { useApi } from '@/hook/apifetch';
+import { ChatBotService } from '@/hook/apifetch';
 const ChatBotHistory = ({setChatID,activeChat=0,setSearch,search}) => {
      const [ChatGroup,setChatGroup] = useState([]); 
      const [Caseactive,setCaseactive] = useState(0);
        const [SearchHistory, setSearchHistory] = useState([]);
-       const {apiFetch} = useApi();
       const caseDeta = [
        {
          name: "Case Chats",
@@ -36,18 +35,14 @@ const ChatBotHistory = ({setChatID,activeChat=0,setSearch,search}) => {
        async function handlenewchat(index){
              setChatID(0);
              const now = new Date();
-              const res = await apiFetch(`/api/newchat`,{
-                 method : "POST",
-                 headers : {"Content-Type" : "application/json"},
-                 body : JSON.stringify({created_at : now,index})
-               })
+              const data = await ChatBotService.createChat({created_at : now,index})
                setChatID(data.id)
              }
          useEffect(()=>{
            setChatID(ChatGroup?.sort((a,b)=>new Date(a.lastUpdated) - new Date(b.lastUpdated))[ChatGroup.length-1]?.id)
          },[ChatGroup])
           async function handleShistory(){
-    const data = await apiFetch("/api/chatbot/search/history")
+    const data = await ChatBotService.getChatHistory();
     setSearchHistory(data.data)
   }
   useEffect(()=>{

@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import { Share2 , Clipboard,Check} from 'lucide-react'
 import ReactMarkdown from "react-markdown";
 import Image from 'next/image';
-import { useApi } from '@/hook/apifetch';
+import { ChatBotService } from '@/hook/apifetch';
 const Bot = ({text ,id, error}) => {
   const [copied,setCopied] = useState(false);
   const [showlink,setShowLink] = useState(false);
-  const {apiFetch} = useApi();
   const handleShareLink = async()=>{
-    const data = await apiFetch(`/api/share/${id}`);
+    const data = await ChatBotService.searchChat(id)
     return data.shareID
   }
 const shareOptions = [

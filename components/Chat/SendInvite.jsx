@@ -1,19 +1,14 @@
 import { User } from '@/app/context/UserContext'
-import { useApi } from '@/hook/apifetch';
+import { ChatService } from '@/hook/apifetch';
 import { CircleQuestionMark } from 'lucide-react'
 import React, { useContext } from 'react'
 import { toast } from 'react-toastify';
 
 const SendInvite = ({id,setReceiver_id}) => {
     const {user} = useContext(User);
-    const {apiFetch} = useApi();
     async function handleSendRequest(){
         const now = new Date()
-        const data = await apiFetch("/api/chat/request",{
-            method : "POST",
-            headers : { "Contenr-Type" : "application/json"},
-            body : JSON.stringify({requester_id : user.id,created_at : now,receiver_id : id})
-        })
+        const data = await ChatService.sendRequest({requester_id : user.id,created_at : now,receiver_id : id})
         toast.success(data.message ?? "Request sent")
         setReceiver_id(false)
     }

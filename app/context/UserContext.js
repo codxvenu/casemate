@@ -1,5 +1,5 @@
 "use client"
-import { useApi, UserService } from '@/hook/apifetch'
+import {UserService } from '@/hook/apifetch'
 import React, { useState,useEffect } from 'react'
 import { createContext } from 'react'
 export const User = createContext()
