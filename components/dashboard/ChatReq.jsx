@@ -4,7 +4,7 @@ import { UserRoundX,UserRoundCheck } from 'lucide-react'
 const ChatReq = ({chatRequests,handleRequest}) => {
   return (
     <ul className="flex flex-col justify-center items-start gap-1 mt-3.5">
-                {chatRequests?.map((i,index) => (
+                {!!chatRequests.length && chatRequests?.map((i,index) => (
                   <li
                     className="flex justify-between border-b-2 px-2 py-2 border-[var(--fileBox)] shadow-md gap-2 bg-[var(--background)] w-full items-center"
                     key={index}
@@ -26,6 +26,7 @@ const ChatReq = ({chatRequests,handleRequest}) => {
                     </span>
                   </li>
                 ))}
+                {!chatRequests.length && <span className='flex items-center justify-center mt-7 h-full w-full'><small>No Freind Request</small> </span>}
               </ul>
   )
 }

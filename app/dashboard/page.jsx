@@ -62,7 +62,7 @@ async function handleRequest(action,i) {
       <Loader/>
       </div> : 
       <>
-      <div className=" w-screen h-screen flex flex-col overflow-x-hidden overflow-y-scroll" style={{scrollbarWidth : "none"}}>
+      <div className=" w-screen max-[768px]:h-[calc(100vh-58px]) h-screen flex flex-col overflow-x-hidden overflow-y-scroll" style={{scrollbarWidth : "none"}}>
         <div className="grid max-[1170px]:flex flex-col min-[550px]:grid-cols-[repeat(auto-fit,minmax(275px,.5fr))] min-[780px]:mr-3 mt-3 h-fit mb-4">
         <div className=" max-[768px]:w-screen col-span-3 grid max-[600px]:flex flex-col  grid-cols-[repeat(auto-fit,minmax(250px,.5fr))] grid-rows-auto p-3 gap-3">
        <Stat stat={Dashboard?.stat ?? []}/>
@@ -73,21 +73,25 @@ async function handleRequest(action,i) {
           <h2 className="font-semibold mb-3">Notices & Reminder</h2>
           <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
           <ul className="grid grid-cols-4 gap-2 w-max">
-            <li className="max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <li className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
             <small className="text-[var(--fileText)]">Sept 22,2024</small>
             <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+             <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
             </li>
-            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <li className="relative max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
             <small className="text-[var(--fileText)]">Sept 22,2024</small>
             <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
             </li>
-            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <li className="relative max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
             <small className="text-[var(--fileText)]">Sept 22,2024</small>
             <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+            <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
             </li>
-            <li className="max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
+            <li className="relative max-[768px]:w-[210px] min-w-[218px]  flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">Court filling</h3>
             <small className="text-[var(--fileText)]">Sept 22,2024</small>
             <h4 className="font-normal text-[12px]">Court filling & Court filling</h4>
+           <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
             </li>
           </ul>
           </div>
@@ -96,9 +100,10 @@ async function handleRequest(action,i) {
        <div className={`w-full h-full py-4 px-2.5 max-[768px]:w-screen max-[768px]:pt-0 max-[768px]:max-h-[482px] grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] min-[1195px]:col-span-[span 4] gap-2 ${!iconOnly ? "max-[1353px]:col-span-4" : "max-[1170px]:col-span-4"}`}>
         <div className="shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] w-full min-w-full max-w-full">
         <span className="block relative shadow-sm border-[1px] border-gray-100 px-1 rounded-md mb-2">
-        <input type="text" placeholder="Search" className="px-7 py-1.5 outline-0"/>
-        <Search className="w-4 h-4 absolute top-2.5 left-2"/>
+        <input type="text" placeholder="Search" className="px-2 py-1.5 outline-0 w-[95%]"/>
+        <Search className="w-5 h-5 absolute top-2.5 right-2 text-blue-600"/>
         </span>
+
         <ChatReq handleRequest={handleRequest} chatRequests={Dashboard?.chatRequests}/>
         </div>
         <div className=" shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] ">
