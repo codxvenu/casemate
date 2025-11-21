@@ -7,33 +7,9 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import ChatBotHistory from './SubBar/ChatBotHistory'
 import ChatSearch from './ChatSearch'
+import { options } from '@/constants/options'
 const SideBar = ({iconOnly,setIconOnly,showBar,setShowBar,atab=0,setChatID,search,setSearch}) => {
-    const options = [
-  {
-    name: "Dashboard",
-    icon: LayoutDashboard,
-    route: "/dashboard",
-    description: "Quick overview"
-  },
-  {
-    name: "FileVault",
-    icon: Folder,
-    route: "/filemanager",
-    description: "Manage files"
-  },
-  {
-    name: "ChatRoom",
-    icon: MessagesSquare,
-    route: "/chat",
-    description: "Chat clients"
-  },
-  {
-    name: "CaseBot",
-    icon: Bot,
-    route: "/chatbot",
-    description: "AI assistant"
-  }
-];
+    
     const [active,setActive] = useState(atab);
     const[activeChat,setActiveChat] = useState(0);
     const {theme,ChangeTheme} = useContext(Theme);

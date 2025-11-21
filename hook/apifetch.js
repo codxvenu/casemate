@@ -45,10 +45,10 @@ export const UserService = {
 };
 export const dashboardService = {
   getStats: () => apiFetch("/api/stats"),
-  actionReq: ({ action, id, now, receiver_id, sender_id }) =>
+  actionReq: ({ action, id, now, requester_id, sender_id }) =>
     apiFetch(
-      "/api/request/actions",
-      POST({ action, id, now, receiver_id, sender_id })
+      "/api/chat/request/actions",
+      POST({ action, id, now, requester_id, sender_id })
     ),
   addNotice: (formData) => apiFetch("/api/addnotice", POST(formData)),
 };

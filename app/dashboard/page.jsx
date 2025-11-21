@@ -1,32 +1,23 @@
 "use client";
 import SideBar from "@/components/sideBar";
 import Stat from "@/components/dashboard/stat";
-import { Columns2, DoorOpen, UserRoundCheck,Bell,Trash2, ChevronRight, ChevronLeft, Plus, UserRoundX, Search } from "lucide-react";
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
+import { Search } from "lucide-react";
+import React, { useContext, useEffect,useState } from "react";
 import Loader from "@/components/loader";
 import { User } from "../context/UserContext";
 import { toast } from "react-toastify";
 import { dashboardService } from "@/hook/apifetch";
 import Calandar from "@/components/dashboard/calandar";
-import Notices from "@/components/dashboard/notices";
 import ChatReq from "@/components/dashboard/ChatReq";
-import Header from "@/components/Header";
+
+import SidebarMd from "@/components/SidebarMd";
 const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
   const [iconOnly, setIconOnly] = useState(false);
-  const [currentDate, setCurrentDate] = useState([]);
-  const[SearchDate,setSearchDate]= useState({});
   const [Dashboard, setDashboard] = useState([]);
   const [shownote, setShownote] = useState(false);
-  const [notes, setnotes] = useState([]);
-  const [showBell,setShowBell] = useState(false);
-  const [history,setHistory] = useState([]);
-  const [notice,setNotice] = useState([]);
   const [formData,setformData] = useState({});
-  const [showActions,setShowActions] = useState(false)
-  const [requests,setRequests] = useState([])
   const {user} = useContext(User)
   useEffect(()=>{
     handleStats()
@@ -47,19 +38,19 @@ async function handleRequest(action,i) {
   const body = {
     id : i.id,
     now,
-    receiver_id : i.receiver_id,
+    requester_id : i.requester_id,
     sender_id : user.id,
     action : action
   }
   const data = await dashboardService.actionReq(body)
-  toast.success(data.message , "Message request Accept")
+  toast.success(data.message ?? "Message request Accept")
   setRequests((prev)=>{
     return prev.filter((j)=>j.id !== i.id)
   })
 }
 //const notices = notice?.filter((i)=>ConvertDate(i.fortime).day === SearchDate.day && ConvertDate(i.fortime).month === SearchDate.month.id && ConvertDate(i.fortime).year === SearchDate.year)
   return (
-    <div className={`flex h-screen overflow-clip `} >
+    <div className={`bg-[var(--fileBox)] flex max-[768px]:flex-col h-screen overflow-clip `} >
       <SideBar
         showBar={showBar}
         setShowBar={setShowBar}
@@ -70,7 +61,8 @@ async function handleRequest(action,i) {
       {loading ? <div className="flex items-center justify-center w-full h-screen">
       <Loader/>
       </div> : 
-      <div className="bg-[var(--fileBox)] w-screen h-screen flex flex-col overflow-x-hidden overflow-y-scroll" style={{scrollbarWidth : "none"}}>
+      <>
+      <div className=" w-screen h-screen flex flex-col overflow-x-hidden overflow-y-scroll" style={{scrollbarWidth : "none"}}>
         <div className="grid max-[1170px]:flex flex-col min-[550px]:grid-cols-[repeat(auto-fit,minmax(275px,.5fr))] min-[780px]:mr-3 mt-3 h-fit mb-4">
         <div className=" max-[768px]:w-screen col-span-3 grid max-[600px]:flex flex-col  grid-cols-[repeat(auto-fit,minmax(250px,.5fr))] grid-rows-auto p-3 gap-3">
        <Stat stat={Dashboard?.stat ?? []}/>
@@ -102,14 +94,14 @@ async function handleRequest(action,i) {
         </div>
         </div>
        <div className={`w-full h-full py-4 px-2.5 max-[768px]:w-screen max-[768px]:pt-0 max-[768px]:max-h-[482px] grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] min-[1195px]:col-span-[span 4] gap-2 ${!iconOnly ? "max-[1353px]:col-span-4" : "max-[1170px]:col-span-4"}`}>
-        <div className="shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[250px] w-full min-w-full max-w-full">
+        <div className="shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] w-full min-w-full max-w-full">
         <span className="block relative shadow-sm border-[1px] border-gray-100 px-1 rounded-md mb-2">
         <input type="text" placeholder="Search" className="px-7 py-1.5 outline-0"/>
         <Search className="w-4 h-4 absolute top-2.5 left-2"/>
         </span>
         <ChatReq handleRequest={handleRequest} chatRequests={Dashboard?.chatRequests}/>
         </div>
-        <div className=" shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[250px] ">
+        <div className=" shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] ">
         <h2 className="font-medium">Quick Reminder</h2>
         <ul className="flex items-center justify-start mt-2.5">
           <li className="flex gap-2 items-center relative w-full"><input type="checkbox" name="reminder" id="" /><h3>Rajus wife</h3> <small className="absolute top-[2.5px] right-1 text-[var(--fileText)]">Sep 22 ,2025</small></li>
@@ -117,8 +109,10 @@ async function handleRequest(action,i) {
         </div>
        </div>
         </div>
-     
       </div>
+      <SidebarMd/>
+      </>
+      
       }
       {shownote && 
       <div className="backdrop-blur-md fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-screen h-screen flex items-center justify-center z-[10000000000]">

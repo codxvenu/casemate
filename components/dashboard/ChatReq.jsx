@@ -17,10 +17,10 @@ const ChatReq = ({chatRequests,handleRequest}) => {
                     </span>
                     </span>
                     <span className="flex gap-2 text-[var(--fileText)]">
-                      <button className="p-2 shadow-green-300 shadow-sm rounded-sm hover:scale-100" onClick={()=>handleRequest("accept")}>
+                      <button className="p-2 shadow-green-300 shadow-sm rounded-sm hover:scale-100" onClick={()=>handleRequest("accept",i)}>
                         <UserRoundCheck className="w-4 h-4 " />
                         </button>
-                      <button className="p-2 shadow-red-300 shadow-sm rounded-sm" onClick={()=>handleRequest("reject")}>
+                      <button className="p-2 shadow-red-300 shadow-sm rounded-sm" onClick={()=>handleRequest("reject",i)}>
                         <UserRoundX className="w-4 h-4" />
                         </button>
                     </span>
