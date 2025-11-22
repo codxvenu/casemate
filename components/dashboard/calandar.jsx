@@ -60,7 +60,7 @@ const Calandar = () => {
         {days.map((i, index) => (
           <li className="mt-2" onClick={() => handleDate(index+1)} key={index}>
             <button
-              className={`flex items-center justify-center aspect-square w-full rounded-md text-sm leading-none transition-all outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--fileBox)] hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring ${currentDate.day === index+1 && "!bg-blue-600 text-[var(--foreground)]"}`}
+              className={`flex items-center justify-center aspect-square w-full rounded-md text-sm leading-none transition-all outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-[var(--fileBox)] hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring ${currentDate.day === index+1 && "!bg-blue-600 text-white"}`}
             >
               {index + 1}
             </button>

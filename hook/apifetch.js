@@ -10,16 +10,17 @@ export async function apiFetch(url, options) {
     ...options,
     credentials: "include",
   });
-  const data = res.json().catch(() => null);
+  const data = await res.json().catch(() => null);
   if (!res.ok) {
     if (res.status === 401) {
       if (noRedirect.includes(window.location.pathname)) return;
       toast.error("Session Over");
       return (window.location.href = "/login");
     }
-    return toast.error(data.error ?? "something went wrong");
+    return toast.error(data?.error ?? "something went wrong");
   }
-  return data;
+    if(data.message) toast.success(data?.message)
+    return data;
 }
 const POST = (body) => ({
   method: "POST",
@@ -44,14 +45,13 @@ export const UserService = {
   getUser: () => apiFetch("/api/auth"),
 };
 export const dashboardService = {
-  getStats: () => apiFetch("/api/stats"),
+  getStats: () => apiFetch("/api/Dashboard/stats"),
   actionReq: ({ action, id, now, requester_id, sender_id }) =>
     apiFetch(
       "/api/chat/request/actions",
       POST({ action, id, now, requester_id, sender_id })
     ),
-  addNotice: (formData) => apiFetch("/api/addnotice", POST(formData)),
-  addReminder: (formData) => apiFetch("/api/addReminder", POST(formData)),
+  addNotice: ({...formData}) => apiFetch("/api/Dashboard/addnotice", POST(formData)),
 };
 export const FileService = {
   delete: (id, filename) =>

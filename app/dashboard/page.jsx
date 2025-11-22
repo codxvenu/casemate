@@ -12,6 +12,7 @@ import ChatReq from "@/components/dashboard/ChatReq";
 import AddReminder from "@/components/dialoge/addReminder";
 import SidebarMd from "@/components/SidebarMd";
 import Notices from "@/components/dashboard/notices";
+import QuickReminder from "@/components/dashboard/QuickReminder";
 const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
@@ -30,13 +31,14 @@ async function handleStats(){
   setDashboard(data.data)
   setLoading(false)
 }
-async function handleAddnotice(){
-  const data = await dashboardService.addNotice(formData)
-  toast.success(data?.message || "Note added")
-};
-async function handleReminder(){
-  const data = await dashboardService.addReminder(formData)
-  toast.success(data?.message || "Note added")
+async function handleAddnotice(formData,action){
+  const data = await dashboardService.addNotice({...formData,action})
+  if(!data.error){
+    handleStats()
+    setReminder(false)
+    return
+  }
+    
 };
 
 async function handleRequest(action,i) {
@@ -48,8 +50,7 @@ async function handleRequest(action,i) {
     sender_id : user.id,
     action : action
   }
-  const data = await dashboardService.actionReq(body)
-  toast.success(data.message ?? "Message request Accept")
+  await dashboardService.actionReq(body)
   setRequests((prev)=>{
     return prev.filter((j)=>j.id !== i.id)
   })
@@ -113,23 +114,12 @@ async function handleRequest(action,i) {
               </table>
               </div>
           </div>
-        <Notices setReminder={setReminder}/>
+        <Notices notices={Dashboard.notice} setReminder={setReminder}/>
         </div>
        <div className={`w-full h-full py-4 px-2.5 max-[768px]:w-screen max-[768px]:pt-0 max-[768px]:max-h-[482px] grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] min-[1195px]:col-span-[span 4] gap-2 ${!iconOnly ? "max-[1353px]:col-span-4" : "max-[1170px]:col-span-4"}`}>
-        <div className="shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] w-full min-w-full max-w-full">
-        <span className="block relative shadow-sm border-[1px] border-gray-100 px-1 rounded-md mb-2">
-        <input type="text" placeholder="Search" className="px-2 py-1.5 outline-0 w-[95%]"/>
-        <Search className="w-5 h-5 absolute top-2.5 right-2 text-blue-600"/>
-        </span>
-
+        
         <ChatReq handleRequest={handleRequest} chatRequests={Dashboard?.chatRequests}/>
-        </div>
-        <div className=" shadow-md bg-[var(--foreground)] p-4 rounded-md min-h-[170px] ">
-        <h2 className="font-medium flex items-center justify-between">Quick Reminder <Plus className="w-5 h-5 text-blue-600" onClick={()=>setReminder("reminder")}/></h2>
-        <ul className="flex items-center justify-start mt-2.5">
-          <li className="flex gap-2 items-center relative w-full"><input type="checkbox" name="reminder" id="" /><h3>Rajus wife</h3> <small className="absolute top-[2.5px] right-1 text-[var(--fileText)]">Sep 22 ,2025</small></li>
-        </ul>
-        </div>
+        <QuickReminder notices={Dashboard.notice} setReminder={setReminder}/>
        </div>
         </div>
       </div>
@@ -162,7 +152,7 @@ async function handleRequest(action,i) {
       </div>
       </div>
       }
-    {!!Reminder && <AddReminder setReminder={setReminder} handleReminder={handleReminder} action={Reminder}/>}
+    {!!Reminder && <AddReminder setReminder={setReminder} handleAddnotice={handleAddnotice} action={Reminder}/>}
     </div>
   );
 };

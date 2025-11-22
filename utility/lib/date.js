@@ -1,12 +1,20 @@
 import { months } from "@/constants/months";
-export function ConvertDate(date) {
-    if(!date) return
-  var date = new Date(date);
+export function ConvertDate(Ndate) {
+    if(!Ndate) return
+  const date = new Date(date);
   return {
     day: date.getDate(),
     month: date.getMonth() + 1,
     year: date.getFullYear(),
   };
+}
+export function ConvertMDY(Ndate){
+  if(!Ndate) return
+  const date = new Date(Ndate);
+  const day = date.getDate();
+  const month = months[date.getMonth()].shortForm
+  const year = date.getFullYear()
+  return `${month} ${day},${year}`
 }
 export function ConvertTime(time) {
     if(!time) return

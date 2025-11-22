@@ -1,6 +1,6 @@
 import React from 'react'
 import { inter } from '@/app/layout'
-import { ConvertTime } from '@/utility/lib/date'
+import { ConvertMDY, ConvertTime } from '@/utility/lib/date'
 import { Plus } from 'lucide-react'
 const Notices = ({notices,setReminder}) => {
   return (
@@ -9,9 +9,9 @@ const Notices = ({notices,setReminder}) => {
           <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
           <ul className="grid grid-cols-4 gap-2 w-max pr-9">
             {!!notices?.length && notices?.map((n,index)=>(
-            <li key={index} className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">{n.title}</h3>
-            <small className="text-[var(--fileText)]">{n.created_at}</small>
-            <h4 className="font-normal text-[12px]">{n.description}</h4>
+            <li key={index} className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">{n.Title}</h3>
+            <small className="text-[var(--fileText)]">{ConvertMDY(n.fortime)}</small>
+            <h4 className="font-normal text-[12px]">{n.Description}</h4>
              <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
             </li>
             ))}
