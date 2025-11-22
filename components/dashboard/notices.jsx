@@ -2,33 +2,30 @@ import React from 'react'
 import { inter } from '@/app/layout'
 import { ConvertTime } from '@/utility/lib/date'
 import { Plus } from 'lucide-react'
-const Notices = ({notice,currentNote,setShownote,shownote}) => {
+const Notices = ({notices,setReminder}) => {
   return (
-    <div className="relative shadow-sm max-[600px]:bg-[var(--fileBox)] bg-[var(--fileBox)]  max-[600px]:gap-2.5 min-h-[130px] h-[100%] rounded max-[600px]:flex flex-col grid grid-cols-2">
-              <div className="overflow-y-scroll max-[600px]:h-[138px] max-[768px]:h-[274px] h-[150px] scrollbtn" style={{scrollbarWidth : "none"}}>
-             {notice?.length !==0 && 
-             <ul className={`${inter.className} bg-[var(--foreground)] flex flex-col gap-2  h-full `} >
-            {notice
-            ?.map((n,index)=>(
-            <li key={index} className="border-b-[var(--border-color)] border-b-[1px] text-[13px] bg-[var(--foreground)] px-2 py-3 capitalize" onClick={()=>setCurrentNote(n)}>• {ConvertTime(n.fortime.split('T')[1])} — {n.Title}</li>
+      <div className="col-span-4 p-2 m-2  h-full">
+          <h2 className="font-semibold mb-3 flex items-center justify-between">Notices & Reminder <Plus className="w-5 h-5 text-blue-600" onClick={()=>setReminder("reminder")}/></h2>
+          <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
+          <ul className="grid grid-cols-4 gap-2 w-max pr-9">
+            {!!notices?.length && notices?.map((n,index)=>(
+            <li key={index} className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">{n.title}</h3>
+            <small className="text-[var(--fileText)]">{n.created_at}</small>
+            <h4 className="font-normal text-[12px]">{n.description}</h4>
+             <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
+            </li>
             ))}
-               </ul>
-             } 
-            {notice?.length ===0 && <h3 className="flex items-center justify-center p-12 text-[14px]">no notes </h3>}
-              </div>
-             <div className={`bg-[var(--foreground)] text-center align-middle flex items-center justify-start p-3 `}>
-              {currentNote?.length !== 0 &&
-              <ul className="flex flex-col items-start justify-start text-start text-[14px] capitalize">
-                <li className="flex font-semibold gap-1">Title : <h3 className="font-normal text-[13px]"> {currentNote?.Title} </h3>  </li>
-                <li  className="flex font-semibold gap-1">Time : <h3 className="font-normal text-[13px]">{ConvertTime(currentNote?.fortime.split('T')[1])}</h3></li>
-                <li className=" font-semibold gap-1">Description : <p className="font-normal text-[13px]">{currentNote?.Description}</p></li>
-              </ul>
-              }
-              </div>
-           <span className="flex items-center bg-[var(--fileBox)] absolute right-0 p-2" onClick={()=>setShownote(!shownote)}>
-            <Plus className="w-4 h-4"/>
-            </span>  
-            </div>
+            {!notices?.length && 
+            <li  className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)] min-h-[80px]"><h3 className="font-semibold">  </h3>
+            <small className="text-[var(--fileText)]"></small>
+            <h4 className="font-normal text-[12px] text-center">no notice</h4>
+             <span className='absolute top-0 right-0 w-1 rounded-md h-full block bg-blue-500'></span>
+            </li>
+            }
+           
+          </ul>
+          </div>
+        </div>
   )
 }
 

@@ -51,6 +51,7 @@ export const dashboardService = {
       POST({ action, id, now, requester_id, sender_id })
     ),
   addNotice: (formData) => apiFetch("/api/addnotice", POST(formData)),
+  addReminder: (formData) => apiFetch("/api/addReminder", POST(formData)),
 };
 export const FileService = {
   delete: (id, filename) =>

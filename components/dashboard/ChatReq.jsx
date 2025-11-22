@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { UserRoundX,UserRoundCheck } from 'lucide-react'
-const ChatReq = ({chatRequests,handleRequest}) => {
+const ChatReq = ({chatRequests=[],handleRequest}) => {
   return (
     <ul className="flex flex-col justify-center items-start gap-1 mt-3.5">
                 {!!chatRequests.length && chatRequests?.map((i,index) => (
