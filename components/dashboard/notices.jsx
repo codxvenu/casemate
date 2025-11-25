@@ -7,7 +7,7 @@ const Notices = ({notices,setReminder}) => {
       <div className="col-span-4 p-2 m-2  h-full">
           <h2 className="font-semibold mb-3 flex items-center justify-between">Notices & Reminder <Plus className="w-5 h-5 text-blue-600" onClick={()=>setReminder("reminder")}/></h2>
           <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
-          <ul className="grid grid-cols-4 gap-2 w-max pr-9">
+          <ul className="flex gap-2 w-max pr-9">
             {!!notices?.length && notices?.map((n,index)=>(
             <li key={index} className="relative max-[768px]:w-[210px] min-w-[218px] flex flex-col gap-2 capitalize shadow-sm rounded-md px-2 py-3 bg-[var(--foreground)]"><h3 className="font-semibold">{n.Title}</h3>
             <small className="text-[var(--fileText)]">{ConvertMDY(n.fortime)}</small>

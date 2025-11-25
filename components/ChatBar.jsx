@@ -131,7 +131,7 @@ const ChatBar = ({ setReceiver, CheckDb, ActionIndexDb, CreateIndexDb ,showBar,s
   return (
     <>
   
-      <div className="w-screen h-screen inset-0 bg-[rgba(0,0,0,0.1)] fixed top-0 z-[10000]" onClick={()=>setShowBar((prev)=>!prev)}></div>
+      <div className="w-screen h-screen inset-0 bg-[rgba(0,0,0,0.4)] backdrop-blur-[1px] fixed top-0 z-[10000]" onClick={()=>setShowBar((prev)=>!prev)}></div>
     <div className={`py-1 bg-[var(--fileBox)] w-[260px] h-screen shrink-0 top-0 max-[568px]:fixed min-[768px]:-ml-4 z-[1000000] left-0 ${!showBar && "!hidden"}`}>
       <span className="flex p-3 bg-[var(--foreground)] m-2 rounded-xl items-center relative ">
         <input

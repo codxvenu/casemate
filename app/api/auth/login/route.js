@@ -25,7 +25,8 @@ export async function POST(req) {
     // maxAge: 3600,          // in seconds
     // path: "/",
     // domain: ".casemate.icu" });
-    return Response.json({ status: 200, message: "User Logged In" });
+    const [rows2] = await db.query("select id,email,avatar,name from users where id = ?",[rows[0].id])
+    return Response.json({ status: 200, message: "User Logged In" ,user : rows2[0] });
   } catch (error) {
     console.log(error);
     

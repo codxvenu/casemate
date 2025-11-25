@@ -1,5 +1,5 @@
 "use client"
-import {React,useState} from 'react'
+import {React,useContext,useState} from 'react'
 import { Mail, Lock, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -8,20 +8,23 @@ import { toast } from 'react-toastify'
 import { authService } from '@/hook/apifetch'
 import { Validator } from '@/utility/lib/validator'
 import { LoginSchema } from '@/schemas/authSchema'
+import { User } from '../context/UserContext'
 const page = () => {
   const router = useRouter();
   const [loading,setLoading] = useState(false);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [FormError,setFormError] = useState([]);
+  const {setUser} = useContext(User)
   const handleLogin = async()=>{
     const valid = await Validator(LoginSchema,{email,password})
     if(!valid.success) return setFormError(valid.error)
     setLoading(true)
     const result = await authService.login({email,password})
     if(!result.message) return 
-    setLoading(false)
+    setUser(result?.user)
     router.push('/dashboard');
+    setLoading(false)
   }
   return (
     <div className='overflow-hidden h-screen flex items-center'>

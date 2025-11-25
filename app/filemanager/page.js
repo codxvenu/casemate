@@ -1,8 +1,18 @@
 "use client"
-import React, { createElement, useContext, useEffect } from 'react'
+import React, { createElement, Fragment, useContext, useEffect } from 'react'
 import { useState } from 'react'
 import {TextAlignJustify,Type,HardDrive,Clock,House,Ellipsis, SortAsc,
-  SortDesc,Search,Grid,List,Columns2,ArrowUpDown,Folder,Info,ChevronUp,FileSpreadsheet,ChevronDown,EllipsisVertical, Download, Share2, Edit, Trash2,FileQuestionMark,Video,Music,FileText,Image as Imageicon,CloudUpload} from 'lucide-react'
+  SortDesc,Search,Grid,List,Columns2,ArrowUpDown,Folder,Info,ChevronUp,FileSpreadsheet,ChevronDown,EllipsisVertical, Download, Share2, Edit, Trash2,FileQuestionMark,Video,Music,FileText,Image as Imageicon,CloudUpload,
+  ChevronRight,
+  LayoutDashboard,
+  CircleQuestionMark,
+  File,
+  FolderArchive,
+  UserPlus,
+  FolderSymlink,
+  Link2,
+  Cross,
+  X} from 'lucide-react'
 import UploadFile from '@/components/uploadFile'
 import Image from 'next/image'
 import Details from '@/components/details'
@@ -13,20 +23,24 @@ import Loader from '@/components/loader'
 import SideBar from '@/components/sideBar'
 import { FileService } from '@/hook/apifetch'
 import { toast } from 'react-toastify'
+import SidebarMd from '@/components/SidebarMd'
+import { ConvertMDY } from '@/utility/lib/date'
+import Header from '@/components/Header'
 const page = () => {
     const {user} = useContext(User);
     const [upload,setUpload] = useState(null);
     const [showBar,setShowBar] = useState(false);
     const [sortName,setSortName] = useState("Name");
     const [showSort,setShowSort] = useState(null);
-    const [loading,setLoading] = useState(true)
+    const [loading,setLoading] = useState(false)
     const [uploadShow,setUploadShow] = useState(false);
     const[allFiles,setAllFiles] = useState([])
-    const [view,setView] = useState(true);
-    const [close,setClose] = useState(false);
+    const [view,setView] = useState("grid");
+    const [showOptions,setShowOptions] = useState(false);
     const [files,setFiles] = useState(false);
     const [iconOnly,setIconOnly] = useState(false);
-    const[showOptions,setShowOptions] = useState(false)
+    const [selectedIds,setSelectedIds] = useState([]);
+    
     async function handleFiles(){
      if(!user.user?.id) return
        const data = await FileService.getFiles();
@@ -89,141 +103,251 @@ const page = () => {
     function handleFileType(type){
       switch (type) {
         case "pdf":
-          return <FileText className="w-10 h-10 p-2.5 text-red-500 bg-[var(--fileBox)] rounded-xl" />
+          return "/pdf.png"
+
+        case "folder":
+          return "/folder.svg"
           
         case "docx":
-          return <FileText className="w-10 h-10 p-2.5 text-blue-500 bg-[var(--fileBox)] rounded-xl" />
+          return "/docx.svg"
           
-        case "mp3":
-          return <Music className="w-10 h-10 p-2.5 text-pink-500 bg-[var(--fileBox)] rounded-xl"/>
-        case "mp4":
-          return <Video className="w-10 h-10 p-2.5 text-shadow-amber-900 bg-[var(--fileBox)] rounded-xl" />
-          
-        case "xlsx":
-          return <FileSpreadsheet className="w-10 h-10 p-2.5 text-green-500 bg-[var(--fileBox)] rounded-xl"/>
-          
-        case "png":
-          return <Imageicon className="w-10 h-10 p-2.5 text-[var(--purple)] bg-[var(--fileBox)] rounded-xl"/>
-          
-        case "jpg":
-          return <Imageicon className='w-10 h-10 p-2.5 text-[var(--light_purple)] bg-[var(--fileBox)] rounded-xl' />
-          
+        case "xsl":
+          return "/xsl.svg"
         default:
           return <FileQuestionMark className='w-10 h-10 p-2.5 text-[var(--text)] bg-[var(--fileBox)] rounded-xl'/>
           
       }
     }
-    function formatDate(time){
-      const date = new Date(time);
-      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = months[date.getMonth()]
-      let hours = date.getHours()
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      const year = date.getFullYear();
+  //   const actions = [
+  // { name: "Details", icon: Info , fn : (i)=>setClose(i) },
+  // { name: "Download", icon: Download ,fn : (i)=>DownloadFile(i)},
+  // { name: "Share", icon: Share2 , fn : (i)=>ShareFile(i)},
+  // { name: "Rename", icon: Edit , fn : (i)=>{const newName = prompt("What is the name of file u want"); RenameFile(i,newName)}}, 
+  // { name: "Delete", icon: Trash2,fn : (i)=>DeleteFile(i)}];
+ const actions = [
+  {
+    name: "Close",
+    fn: () => setSelectedIds([]),
+    icon: X
+  },
+  {
+    name: "Info",
+    fn: () => console.log("info"),
+    icon: UserPlus
+  },
+  {
+    name: "Download",
+    fn: () => console.log("download"),
+    icon: Download
+  },
+  {
+    name: "Move",
+    fn: () => console.log("move"),
+    icon: FolderSymlink
+  },
+  {
+    name: "Delete",
+    fn: () => console.log("delete"),
+    icon: Trash2
+  },
+  {
+    name: "Copy Link",
+    fn: () => console.log("copy-link"),
+    icon: Link2
+  },
+];
 
-      return `${month} ${day}, ${year}, ${hours}:${minutes} ${ampm}`
-    }
-    const actions = [
-  { name: "Details", icon: Info , fn : (i)=>setClose(i) },
-  { name: "Download", icon: Download ,fn : (i)=>DownloadFile(i)},
-  { name: "Share", icon: Share2 , fn : (i)=>ShareFile(i)},
-  { name: "Rename", icon: Edit , fn : (i)=>{const newName = prompt("What is the name of file u want"); RenameFile(i,newName)}}, 
-  { name: "Delete", icon: Trash2,fn : (i)=>DeleteFile(i)}];
+  const folders = [
+  {
+    name : "Documents",
+    totalSize: "2.3 GB",
+    type : "folder",
+    dateCreated: "2025-01-12"
+  },
+   {
+    name : "Videos",
+    totalSize: "22.4 GB",
+    type : "folder",
+    dateCreated: "2024-12-10"
+  },
+  {
+    name : "Documents",
+    totalSize: "2.3 GB",
+    type : "folder",
+    dateCreated: "2025-01-12"
+  },
+  {
+    name : "Projects",
+    totalSize: "850 MB",
+    type : "docx",
+    dateCreated: "2025-02-03"
+  },
+  {
+    name : "s,cskcscndskcdsnmnsmcasncask",
+    totalSize: "5.7 GB",
+    type : "pdf",
+    dateCreated: "2024-11-29"
+  },
+  {
+    name : "Videos",
+    totalSize: "22.4 GB",
+    type : "xsl",
+    dateCreated: "2024-12-10"
+  },
+  {
+    name : "Projects",
+    totalSize: "850 MB",
+    type : "docx",
+    dateCreated: "2025-02-03"
+  },
+  {
+    name : "Images",
+    totalSize: "5.7 GB",
+    type : "pdf",
+    dateCreated: "2024-11-29"
+  },
+ 
+];
+function handleSelection(i){
+  if(!i) return
+  setSelectedIds((prev)=>{
+    return prev?.includes(i.name) ? [...prev.filter((j)=>
+      j !== i.name
+    )] : [...prev,i.name]
+  })
+}
+useEffect(()=>{
+  console.log(selectedIds);
+  
+},[selectedIds])
   return (
-   <div className='flex'>
-   <SideBar atab={1} showBar={showBar} setShowBar={setShowBar} className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`} />
-    <div className={`${allFiles && "overflow-hidden h-screen"} bg-[var(--foreground)] w-screen min-h-screen h-fit flex flex-col`}>
-      <div className='relative flex justify-between min-[425px]:px-4 py-4 bg-[var(--fileBox)] max-[425px]:mx-2  rounded mt-3 mb-2'>
-      <button className='p-2 px-3 bg-[var(--foreground)] mr-2 max-[768px]:hidden' onClick={()=>setIconOnly(!iconOnly)}>
-       <Columns2 className="w-4 h-4"  />
-      </button>
-      <button className='p-2 px-3 bg-[var(--foreground)] mr-2 min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}>
-       <Columns2 className="w-4 h-4"  />
-      </button>
-        <label className='min-[768px]:w-[40%] w-[50%] max-[400px]:!w-[220px] min-[400px]:min-w-[250px] h-[40px] flex items-center gap-3 p-2 bg-[var(--foreground)]  rounded placeholder:text-[var(--text)] placeholder:font-medium'>
-          <Search className='w-4 h-4 text-[var(--text)]' />
-          <input type="text" name='search' placeholder='Search files and folders...' className='outline-0' onChange={(e)=>{setAllFiles(files.filter(f =>
-  f.filename.toLowerCase().includes(e.target.value.toLowerCase())))}}/>
-        </label>
-        <button className='p-2 px-3 bg-[var(--foreground)] mr-2 min-[620px]:hidden' onClick={()=>setShowOptions(!showOptions)}>
-        <Ellipsis className="w-4 h-4 min-[640px]:hidden" />
-      </button>
-       
-        <span className={`flex gap-4 max-[805px]:gap-1 items-center justify-end w-full max-[620px]:absolute right-6 top-[55px] max-[620px]:flex-col max-[620px]:bg-[var(--fileBox)] h-fit max-[620px]:w-fit  min-[620px]:h-[40px] max-[620px]:p-2 ${!showOptions && "max-[620px]:hidden"} z-[100]`}>
-         
-        <a className='flex items-center p-1 rounded-[5px] bg-[var(--foreground)]'>
-          <button onClick={()=>setView(true)} className={`${view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><Grid className="w-4 h-4" /></button>
-          <button onClick={()=>setView(false)} className={`${!view && "bg-[var(--fileBox)] text-[var(--text)]"} p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out text-[var(--fileText)]`}><List className="w-4 h-4" /></button>
-          </a>
-        <span onClick={()=>setShowSort(!showSort)} className='flex items-center relative  gap-2 bg-[var(--foreground)] px-3 py-1 rounded h-full max-[620px]:flex max-[768px]:hidden '>
-      <ArrowUpDown className="w-4 h-4 text-[var(--fileText)]" />
-      <h2 className={`${!iconOnly && "max-[960px]:hidden"} !font-medium max-[830px]:hidden whitespace-nowrap`}>Sort by </h2>
-     <span className='flex gap-3 justify-between items-center text-[var(--fileText)]'>
-      <h4 className={`max-[620px]:block ${!iconOnly && "max-[900px]:hidden"} max-[830px]:hidden `}>{sortName} </h4>
-   <ChevronDown  className={`w-5 h-5 text-[var(--text)] max-[830px]:hidden transition-all duration-150 ease-linear ${showSort && "rotate-180"}`} />
-     </span>
-       {showSort && 
-       <>
-                <div
-                  className="fixed top-0  inset-0 z-10"
-                  onClick={() => setShowSort(false)}
-                />
-                <div className="absolute right-0 top-full mt-2 bg-[var(--foreground)] rounded-lg shadow-lg py-1 z-20 min-w-[195px] animate-in fade-in-0 zoom-in-95 duration-100">
-                  {[
-                    { key: "name", label: "Name", icon: Type },
-                    { key: "size", label: "Size", icon: HardDrive },
-                    { key: "modified", label: "Modified", icon: Clock },
-                  ].map((option) => {
-                    const IconComponent = option.icon;
-                    return (
-                      <button
-                        key={option.key}
-                        onClick={() => setSortName(option.label)}
-                        className=" w-full px-3 py-2.5 text-left  hover:bg-[var(--fileBox)] hover:text-white text-[var(--fileText)] flex items-center justify-between group transition-colors"
-                      >
-                        <div className="flex items-center gap-2">
-                          <IconComponent className="w-4 h-4 text-[var(--text)] group-hover:text-[var(--text)]" />
-                          <span className="text-[var(--text)] text-sm">{option.label}</span>
-                        </div>
-                        
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
-      }
-        </span>
-         <button onClick={()=>setUploadShow(!uploadShow)} className={`bg-[var(--foreground)] p-3 py-2 rounded-[5px] transition-all duration-150 ease-in-out flex gap-2 items-center`}><CloudUpload className="w-4 h-4" /><p className='max-[620px]:block max-[980px]:hidden'>Upload</p></button>
-         
-        </span>
+   <div className='flex max-[768px]:flex-col bg-gray-50 overflow-hidden h-screen'>
+   <SideBar atab={1} setIconOnly={setIconOnly} iconOnly={iconOnly} showBar={showBar} setShowBar={setShowBar} className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}`} />
+    <Header setShowBar={setShowBar}/>
+
+        {/* Main Area */}
+        <main className="flex flex-col p-2 min-[440px]:p-6 w-full">
+
+          {/* Topbar: Search + actions */}
+          <div className="flex max-[600px]:gap-3 max-[600px]:flex-col items-center justify-between min-[600px]:mb-6">
+            <div className="flex items-center gap-4 w-full">
+              <div className="flex items-center gap-3 bg-white border border-gray-200 px-3 py-2 rounded-lg shadow-sm w-full">
+                <Search className='w-4 h-4 aspect-auto'/>
+                 <input className="outline-none w-full text-sm" placeholder="Search files and folders..." />
+              </div>
+        
+            </div>
+
+            <div className="flex items-center gap-3 ml-4">
+              <div className="inline-flex items-center bg-white border border-gray-200 rounded-lg shadow-sm p-1">
+                <button onClick={() => setView('grid')} className={`p-2 rounded ${view === 'grid' ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`} title="Grid view">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+                </button>
+                <button onClick={() => setView('list')} className={`p-2 rounded ${view === 'list' ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`} title="List view">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2" rx="1"/><rect x="4" y="11" width="16" height="2" rx="1"/><rect x="4" y="17" width="16" height="2" rx="1"/></svg>
+                </button>
+              </div>
+
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:opacity-95">Upload</button>
+            </div>
+          </div>
+
+          {/* Breadcrumb + selected info */}
+          <div className="flex justify-end min-[680px]:mb-1 py-3">
+          
+             {!!selectedIds.length && 
+     <div className='flex gap-2  p-1 bg-[var(--foreground)] items-center rounded-3xl shadow-sm w-fit max-[680px]:mx-auto'>
+        {actions.map((a)=>(
+          <Fragment key={a.name}>
+        <button  className='p-2 hover:bg-[var(--fileBox)] rounded-full' onClick={a.fn}>
+       <a.icon className="w-4 h-4"/>
+        </button>
+       <h3 className={`${a.name === "Close" && "!block"} hidden`}>{selectedIds?.length} selected</h3>
+          </Fragment>
+        ))}
       </div>
-      
-       {loading && 
-    <Loader className="absolute top-1/2 right-1/2 !w-12 h-12 " />
-    }
-       {allFiles?.length === 0 && !loading && 
-    <div className='items-center justify-center flex flex-col h-[calc(100vh-84px)] text-[var(--text)] '  >
-   <Folder className=' h-24 w-24'/>
-   <h1>No file</h1>
-    </div>
-    }
-      {view && <GridView allFiles={allFiles} handleFileType={handleFileType} actions={actions} handleSize={handleSize} formatDate={formatDate} DownloadFile={DownloadFile} setClose={setClose} />}
-      {!view && <ListView allFiles={allFiles} handleFileType={handleFileType} actions={actions} handleSize={handleSize} formatDate={formatDate} />}
-      
-      {/* <input type="file" onChange={(e)=>setUpload(e.target.files[0])}  />
-      <button onClick={()=>handleUpload()}>upload</button>
-       */}
-      {close && 
-      <Details onClose={setClose} handleSize={handleSize} handleFileType={handleFileType} formatDate={formatDate} close={close} />
-      }
-    
-  {uploadShow &&  <UploadFile setUploadShow={setUploadShow} handleFiles={handleFiles} />
-   }
-   </div>
-   </div>
+     } 
+          </div>
+
+          {/* Content area */}
+          <div className="bg-white border h-full border-gray-100 p-4 rounded-lg shadow-sm  grid" >
+            {!selectedIds.length && 
+            <div className="flex items-center gap-3 text-sm text-[var(--fileText)]">
+              <div className="text-sm font-light">root@venu</div>
+              {`>`}
+              <div className="text-sm font-light">Cases</div>
+              {`>`}
+              <div className="text-sm text-gray-500">Case #232</div>
+          
+            </div>}
+            <div className='overflow-auto overflow-x-hidden w-full max-[600px]:h-[60vh]' style={{scrollbarWidth : "none"}}>
+            {view === 'grid' ? (
+              <div className="grid grid-cols-1 min-[440px]:grid-cols-[repeat(auto-fit,minmax(155px,1fr))] gap-4 " >
+                {folders.map((item,index) => (
+                  <div key={index} className={`relative p-3 rounded-lg border aspect-auto min-[440px]:aspect-video  ${selectedIds.includes(item.name) ? 'border-blue-300 shadow-md' : 'border-transparent'} hover:border-gray-200 bg-white`} onClick={()=>handleSelection(item)}>
+
+                    {/* <button onClick={() => handleSelection(item)} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+                     
+                    </button> */}
+
+                    <div className="flex flex-col items-start gap-3">
+                      <div className="w-full flex items-center gap-3">
+                        <div className="w-12 h-12 flex items-center justify-center shrink-0">
+                         <Image src={`${handleFileType(item.type)}`} alt='name' width={40} height={40}/>
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="font-medium text-sm truncate whitespace-nowrap overflow-hidden text-ellipsis w-full">{item.name}</div>
+                          <div className="text-xs text-gray-400 truncate uppercase">{item.type}</div>
+                        </div>
+                      </div>
+
+                      <div className="w-full flex items-center justify-between text-xs text-gray-500">
+                        <div>{item.totalSize}</div>
+                        <div className="relative">
+                          <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+                            <EllipsisVertical className='w-4 h-4'/> </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col" >
+                <div className="grid grid-cols-12 gap-4 border-b border-gray-100 pb-2 text-xs text-gray-500">
+                  <div className="col-span-6">Name</div>
+                  <div className="col-span-3">Type</div>
+                  <div className="col-span-2">Size</div>
+                  <div className="col-span-1">Access</div></div>
+
+                {folders.map((item,index) => (
+                  <div key={index} className={`grid grid-cols-12 gap-4 items-center py-3 hover:bg-gray-50 rounded-md ${selectedIds.includes(item.name) ? 'bg-blue-50' : ''}`} onClick={()=>handleSelection(item)}>
+                    <div className="col-span-6 flex items-center gap-3">
+                      <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                       <Image src={`${handleFileType(item.type)}`} alt='name' width={40} height={40}/>
+                      </div> 
+                        <h3 className="font-medium text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis">{item.name}</h3>
+                        
+                    </div>
+
+                    <div className="col-span-3 text-sm text-gray-600">{item.type}</div>
+                    <div className="col-span-2 text-sm text-gray-600">{item.totalSize}</div>
+
+                    <div className="col-span-1 flex justify-between items-center">
+                      <Image src={`${user.avatar}`} width={25} height={25} className='rounded-full' alt='folder'/>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            </div>
+
+          </div>
+
+        </main>
+        
+      </div>
   )
 }
 

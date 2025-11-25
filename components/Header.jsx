@@ -1,34 +1,30 @@
-import React from 'react'
-import { Columns2,Bell } from 'lucide-react'
-const Header = () => {
+import { User } from '@/app/context/UserContext'
+import { AlignCenter, Bell } from 'lucide-react'
+import Image from 'next/image'
+import React, { useContext } from 'react'
+const Header = ({setShowBar}) => {
+  const {user} = useContext(User)
   return (
-    <div className="fixed top-0 flex justify-between px-2 py-3 bg-[var(--foreground)] rounded mb-2 max-h-[55px] max-[680px]:mt-0 max-[680px]:w-full  z-[1000] w-full">
-          <button
-            className="p-2 px-3 hover:bg-[var(--fileBox)] mr-2 max-[768px]:hidden rounded-md"
-            // onClick={() => setIconOnly(!iconOnly)}
-          >
-            <Columns2 className="w-4 h-4" />
-          </button>
-          <button
-            className="p-2 px-3 hover:bg-[var(--fileBox)] mr-2 min-[768px]:hidden rounded-md"
-            // onClick={() => setShowBar(!showBar)}
-            >
-            <Columns2 className="w-4 h-4" />
-          </button>
-          <div className="flex gap-2 items-center flex-row-reverse w-full mr-3">
-            <span className="bg-[var(--fileBox)] flex w-8 h-8 rounded-full items-center justify-center">N</span>
-            <span 
-            // onClick={()=>setShowBell(!showBell)}
-             className="bg-[var(--fileBox)] flex w-8 h-8 rounded-full items-center justify-center relative"><span className="absolute -top-[.5rem] -right-4 bg-[var(--text)] text-[var(--foreground)] p-2 rounded-full w-8 h-5 flex items-center justify-center">
-              <small >20+</small>
-              </span>
-               <Bell className="w-4 h-4"/>
-               {/* {showBell && 
-                <Dialogue handleRequest={handleRequest} Dashboard={Dashboard} setShowBell={setShowBell}/>
-               } */}
-               </span>
-          </div>
-        </div>
+     <div className="sticky top-0 p-4 h-[50px] w-full bg-[var(--foreground)] shadow-sm rounded-md flex items-center justify-between z-[1000] min-[768px]:hidden">
+<AlignCenter className="w-4 h-4 min-[768px]:hidden" onClick={()=>setShowBar((prev)=>!prev)}/> 
+<span className='flex items-center gap-5 relative'>
+  <Bell className='w-4 h-4'/>
+ {/* <small className="
+  absolute -top-2 left-2
+  bg-[var(--text)] text-[var(--foreground)]
+  text-xs
+  h-5 min-w-4
+  px-1
+  py-1.5
+  flex items-center justify-center
+  rounded-full
+  font-mono
+">
+  10
+</small> */}
+<Image src={`${user?.avatar ?? ""}`} width={25} height={25} className="rounded-full" alt="icon"/>
+</span>
+      </div>
   )
 }
 

@@ -1,20 +1,12 @@
 "use client"
-import {UserService } from '@/hook/apifetch'
-import React, { useState,useEffect } from 'react'
+import { useState } from 'react'
 import { createContext } from 'react'
 export const User = createContext()
-const UserContext = ({children}) => {
-    const [user,setUser] = useState(null)
-     useEffect(() => {
-    const handleUser=async()=>{
-      const data = await UserService.getUser()
-      setUser(data?.user)
-    }
-handleUser();
-},[])
+const UserContext = ({Initialuser,children}) => {
+  const[user,setUser] = useState(Initialuser)
   return (
     <div>
-    <User.Provider value={{user}}>
+    <User.Provider value={{user,setUser}}>
       {children}
     </User.Provider>
     </div>

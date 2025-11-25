@@ -8,6 +8,7 @@ import SideBar from "@/components/sideBar";
 import ChatBar from "@/components/ChatBar";
 import Image from "next/image";
 import ChatRoom from "@/components/Chat/ChatRoom";
+import SidebarMd from "@/components/SidebarMd";
 const page = () => {
   const { user } = useContext(User);
   const { socket } = useContext(Socket);
@@ -232,6 +233,7 @@ socket.on("receive-recent-message", (msg) => {
           </label>
         </div>
       </div>
+        <SidebarMd />
     </div>
   );
 };

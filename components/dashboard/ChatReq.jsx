@@ -23,8 +23,8 @@ const ChatReq = ({chatRequests=[],handleRequest}) => {
                     className="flex justify-between border-b-2 px-2 py-2 border-[var(--fileBox)] shadow-md gap-2 bg-[var(--background)] w-full items-center"
                     key={index}
                   >
-                    <span className="flex gap-1">
-                    <Image src={`${i.avatar || ""}`} width={30} height={30} alt={i.name} className="rounded-full"/>
+                    <span className="flex gap-1 items-center">
+                    <Image src={`${i.avatar || ""}`} width={30} height={30} alt={i.name} className="rounded-full h-[30px]"/>
                     <span className={` flex flex-col items-start justify-center text-[13px] text-[var(--fileText)]`}>
                       <h2 className="text-[var(--text)] overflow-hidden text-ellipsis whitespace-nowrap w-[140px]">{i.name}</h2>{" "}
                       <p className="!text-[12px]">Wants to chat</p>
@@ -40,7 +40,7 @@ const ChatReq = ({chatRequests=[],handleRequest}) => {
                     </span>
                   </li>
                 ))}
-                {!chatRequests.length && <span className='flex items-center justify-center mt-7 h-full w-full'><small>No Freind Request</small> </span>}
+                {!req.length && <span className='flex items-center justify-center mt-7 h-full w-full'><small>No Freind Request</small> </span>}
               </ul>
         </div>
   )

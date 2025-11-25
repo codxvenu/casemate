@@ -16,7 +16,7 @@ const SideBar = ({iconOnly,setIconOnly,showBar,setShowBar,atab=0,setChatID,searc
     const ref = useRef(null);
     
   return (
-<div className={`max-[768px]:hidden shrink-0`}>
+<div className={`${!showBar && "max-[768px]:hidden"} shrink-0`}>
 
     <div className={`${iconOnly ? "iconOnly shrinkWidth" : " growWidth"}  ${inter.className} group  max-[768px]:fixed top-0  bg-[var(--foreground)] h-screen p-2 grid grid-rows-[1fr_8fr] shrink-0 z-[1000000000000]`}>
         <div className='flex justify-between items-center gap-2 p-1 rounded-md h-min '>
@@ -51,7 +51,7 @@ const SideBar = ({iconOnly,setIconOnly,showBar,setShowBar,atab=0,setChatID,searc
         }
       </div>
     </div>
-<div className='backdrop-blur-sm w-[calc(100vw-250px)] h-screen absolute top-0 right-0 z-[100000] min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}></div>
+<div className='backdrop-blur-[1px] bg-[rgba(0,0,0,0.27)] w-[calc(100vw-250px)] h-screen absolute top-0 right-0 z-[100000] min-[768px]:hidden' onClick={()=>setShowBar(!showBar)}></div>
 
 </div>
   )

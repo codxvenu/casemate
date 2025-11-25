@@ -14,6 +14,7 @@
     --accent: #18181b;
     --shadow: 0 2px 16px 0 #000000b3;
     --radius: 8px;
+    --border-table: #242424;
     --label: oklch(38% 0 0);
     --border-color: #222;
     --text_input: #fafafa;
@@ -171,7 +172,6 @@ table tbody tr:last-child{
   );
   animation: shimmer-move 1.3s infinite;
 }
-
 @keyframes shimmer-move {
   0% { left: -150px; }
   100% { left: 100%; }

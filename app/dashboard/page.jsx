@@ -12,6 +12,9 @@ import SidebarMd from "@/components/SidebarMd";
 import Notices from "@/components/dashboard/notices";
 import QuickReminder from "@/components/dashboard/QuickReminder";
 import RecentCases from "@/components/dashboard/RecentCases";
+import { AlignCenter } from "lucide-react";
+import Image from "next/image";
+import Header from "@/components/Header";
 const page = () => {
   const [loading, setLoading] = useState(true);
   const [showBar, setShowBar] = useState(false);
@@ -21,7 +24,9 @@ const page = () => {
   const { user } = useContext(User);
   useEffect(() => {
     handleStats();
-  }, []);
+    console.log(user);
+    
+  }, [user]);
   async function handleStats() {
     const data = await dashboardService.getStats();
     setDashboard(data.data);
@@ -54,6 +59,7 @@ const page = () => {
     <div
       className={`bg-[var(--fileBox)] flex max-[768px]:flex-col h-screen overflow-clip `}
     >
+     
       <SideBar
         showBar={showBar}
         setShowBar={setShowBar}
@@ -71,6 +77,7 @@ const page = () => {
             className=" w-screen max-[768px]:h-[calc(100vh-58px]) h-screen flex flex-col overflow-x-hidden overflow-y-scroll"
             style={{ scrollbarWidth: "none" }}
           >
+            <Header setShowBar={setShowBar}/>
             <div className="grid max-[1170px]:flex flex-col min-[550px]:grid-cols-[repeat(auto-fit,minmax(275px,.5fr))] min-[780px]:mr-3 mt-3 h-fit mb-4">
               <div className=" max-[768px]:w-screen col-span-3 grid max-[600px]:flex flex-col  grid-cols-[repeat(auto-fit,minmax(250px,.5fr))] grid-rows-auto p-3 gap-3">
                 <Stat stat={Dashboard?.stat ?? []} />
