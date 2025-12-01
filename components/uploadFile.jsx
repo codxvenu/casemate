@@ -94,7 +94,7 @@ function UFiles(key, file) {
           {/* <div className="w-[80%] h-0.5 bg-blue-400 absolute bottom-0 left-0 rounded-md"></div> */}
         </div>
         <span className="flex flex-col justify-between items-end">
-          <X className="w-4 h-4 text-[var(--muted-forground)] hover:text-[var(--text)]" />
+          <X className="w-4 h-4 text-[var(--muted-forground)] hover:text-[var(--text)]" onClick={()=>setFileList((prev)=>prev.filter((i)=>i?.name !== file?.name))}/>
           <small className={`text-[var(--muted-forground)] !text-[12px] relative group ${file?.status === "Completed" && "text-green-600"} ${file?.status === "Failed" && "text-red-600"}`}>
             {file?.status}
             <small className="absolute top-4 !text-[11px] left-4 bg-black text-white p-1 px-2 group-hover:block hidden w-max h-max">{file?.error?.message}</small>
@@ -145,7 +145,7 @@ function UFiles(key, file) {
         <small className="block text-[11px] p-2 text-[var(--muted-forground)] mt-1">
           Recommended max. size: 10 MB, Accepted file types: XLSX, XLS, CSV.
         </small>
-        <div className="pt-5 grid gap-2">
+        <div className="pt-5 grid gap-2 max-h-[360px] overflow-y-scroll" style={{scrollbarWidth : "none"}}>
           {fileList?.map((file, index) => UFiles(index, file))}
         </div>
         <div className="flex items-center gap-3 justify-end mt-10 ">
