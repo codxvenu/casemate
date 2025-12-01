@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { authService } from '@/hook/apifetch'
 import { Validator } from '@/utility/lib/validator'
 import { LoginSchema } from '@/schemas/authSchema'
-import { User } from '../context/UserContext'
+import { User } from '@/app/context/UserContext'
 const page = () => {
   const router = useRouter();
   const [loading,setLoading] = useState(false);
