@@ -19,7 +19,7 @@ import {TextAlignJustify,Type,HardDrive,Clock,House,Ellipsis, SortAsc,
 import UploadFile from '@/components/uploadFile'
 import Image from 'next/image'
 import Details from '@/components/details'
-import { User } from '../context/UserContext'
+import { User } from '../../context/UserContext'
 import GridView from '@/components/gridView'
 import ListView from '@/components/listView'
 import Loader from '@/components/loader'
@@ -259,7 +259,7 @@ useEffect(()=>{
              <div className="flex items-center gap-3 text-sm text-[var(--fileText)] p-1 px-4 mb-2 bg-white rounded-sm shadow-sm min-[625px]:w-1/2">
             <button className='hover:bg-gray-100 p-2 rounded-md flex gap-2 w-28 items-center ' onClick={()=>{setFiles([...allFiles]); setUpath([]); }}>
              <Home className='w-4 h-4 shrink-0'/>
-             <div className='truncate'>{user.email}</div>
+             <div className='truncate'>{user?.email}</div>
             </button>
              <ChevronRight className={`${!Upath.length && "hidden"} w-4 h-4`}/>
               {Upath?.map((i,index)=>(

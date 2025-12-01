@@ -28,7 +28,7 @@ export function handleInitializeDate(setDate) {
   const date = new Date();
   setDate({
     day: date.getDate(),
-    month: months[date.getMonth()+1],
+    month: months[date.getMonth()],
     year: date.getFullYear(),
   });
 }

@@ -3,7 +3,7 @@ import SideBar from "@/components/sideBar";
 import Stat from "@/components/dashboard/stat";
 import React, { useContext, useEffect, useState } from "react";
 import Loader from "@/components/loader";
-import { User } from "../context/UserContext";
+import { User } from "../../context/UserContext";
 import { dashboardService } from "@/hook/apifetch";
 import Calandar from "@/components/dashboard/calandar";
 import ChatReq from "@/components/dashboard/ChatReq";
@@ -12,8 +12,6 @@ import SidebarMd from "@/components/SidebarMd";
 import Notices from "@/components/dashboard/notices";
 import QuickReminder from "@/components/dashboard/QuickReminder";
 import RecentCases from "@/components/dashboard/RecentCases";
-import { AlignCenter } from "lucide-react";
-import Image from "next/image";
 import Header from "@/components/Header";
 const page = () => {
   const [loading, setLoading] = useState(true);

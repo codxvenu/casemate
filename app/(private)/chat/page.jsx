@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { ArrowLeft, Columns2, Search } from "lucide-react";
 import Person from "@/components/person";
-import { User } from "../context/UserContext";
-import { Socket } from "../context/SocketContext";
+import { User } from "../../context/UserContext";
+import { Socket } from "../../context/SocketContext";
 import SideBar from "@/components/sideBar";
 import ChatBar from "@/components/ChatBar";
 import Image from "next/image";
