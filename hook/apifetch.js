@@ -17,6 +17,7 @@ export async function apiFetch(url, options) {
       toast.error("Session Over");
       return (window.location.href = "/login");
     }
+    console.log(data?.error);
     return toast.error(data?.error ?? "something went wrong");
   }
     if(data.message) toast.success(data?.message)
@@ -54,14 +55,15 @@ export const dashboardService = {
   addNotice: ({...formData}) => apiFetch("/api/Dashboard/addnotice", POST(formData)),
 };
 export const FileService = {
-  delete: (id, filename) =>
-    apiFetch(`${backend}/delete/${id}/${filename}`, { method: "DELETE" }),
-  rename: ({ oldName, newName }) =>
-    apiFetch(`${backend}/rename`, PUT({ oldName, newName })),
+  CreateDir : ({foldername,fpath,userId,time})=>apiFetch(`${backend}/upload/createDir`,POST({foldername,fpath,userId,time})),
+  delete: (selectedIds) =>
+    apiFetch(`${backend}/delete`,{...POST({selectedIds}),method: "DELETE"}),
+  rename: ({ fileId, newName }) =>
+    apiFetch(`${backend}/rename`, PUT({ fileId, newName })),
   share: ({ file, userId }) =>
     apiFetch(`${backend}/Share/`, POST({ file, userId })),
-  getFiles: () => apiFetch("/api/files"),
-  addFile : (data)=> apiFetch(`${backend}/upload`,FormData(data))
+  getFiles: (filepath) => apiFetch(`/api/files?path=${encodeURIComponent(filepath)}`),
+  addFile : (formData)=> apiFetch(`${backend}/upload`,FormData(formData))
 };
 export const ChatBotService = {
   getChatById: (id) => apiFetch(`/api/chatbot/${id}`),

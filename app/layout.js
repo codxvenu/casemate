@@ -25,7 +25,7 @@ export const inter = Inter({
 export default async function RootLayout({ children }) {
    const user = await getUser()
   return (
-    <html lang="en" className="light">
+    <html lang="en" className="light" >
       <body
         className={` antialiased`}>
           <ThemeContext>

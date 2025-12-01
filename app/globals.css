@@ -37,6 +37,7 @@
     --purple: #6c63ff;
     --light_purple: #9292fd;
     --shimmer : rgba(0, 0, 0, 0.1);
+    --muted-forground : #737373;
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {

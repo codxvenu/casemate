@@ -4,11 +4,21 @@ import { createContext } from 'react'
 import { flushSync } from 'react-dom';
 export const Theme = createContext();
 const ThemeContext = ({children}) => {
-    const[theme,setTheme] = useState(true);
+    const[theme,setTheme] = useState(false);
     useEffect(()=>{
-        document.documentElement.classList.add(theme); 
-        document.documentElement.classList.remove(theme === "dark" ? "light" : "dark" );
+      
+      document.documentElement.classList.add(theme); 
+      document.documentElement.classList.remove(theme === "dark" ? "light" : "dark" );
+      console.log(theme,"heme");
+      if(theme){
+        localStorage.setItem("theme",theme)
+      }
     },[theme])
+    // useEffect(()=>{
+    //    const Ltheme = localStorage.getItem("theme")
+    //    setTheme(Ltheme)
+    //    document.documentElement.classList.add(Ltheme);
+    // },[])
   function ChangeTheme(ref = "null"){ 
       if(ref === "null") return
       
