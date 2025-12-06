@@ -64,7 +64,7 @@ export const FileService = {
     apiFetch(`${backend}/Share/`, POST({ file, userId })),
   getFiles: (filepath) => apiFetch(`/api/files?path=${encodeURIComponent(filepath)}`),
   addFile : (formData)=> apiFetch(`${backend}/upload`,FormData(formData)),
-  getFilePreview: (filePath) => apiFetch(`${backend}/previewFile/${filePath}`),
+  getFilePreview: (filePath) => apiFetch(`${backend}/previewFile?path=${encodeURIComponent(filePath)}`),
 };
 export const ChatBotService = {
   getChatById: (id) => apiFetch(`/api/chatbot/${id}`),
