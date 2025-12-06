@@ -7,8 +7,9 @@ const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection
  async function handlePreviewFile(item){
     const filePath = item.path+item.filename
     console.log(filePath,"filePath");
-    
-    await FileService.getFilePreview(filePath.slice(1,))
+    const data = await FileService.getFilePreview(filePath.slice(1,));
+   if(data?.url) return window.location.href = data?.url
+   console.log("failed url ",data)
   }
   return (
     <div className="grid max-[440px]:grid-cols-1 max-[768px]:grid-cols-2  min-[768px]:grid-cols-[repeat(auto-fit,minmax(170px,218px))] gap-4 h-max p-1 max-[768px]:pb-3" >

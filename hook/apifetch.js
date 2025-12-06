@@ -20,7 +20,7 @@ export async function apiFetch(url, options) {
     console.log(data?.error);
     return toast.error(data?.error ?? "something went wrong");
   }
-    if(data.message) toast.success(data?.message)
+    if(data?.message) toast.success(data?.message)
     return data;
 }
 const POST = (body) => ({
