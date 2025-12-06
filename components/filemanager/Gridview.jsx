@@ -8,7 +8,7 @@ const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection
     const filePath = item.path+item.filename
     console.log(filePath.slice(1,),"filePath");
     const data = await FileService.getFilePreview(filePath.slice(1,));
-   if(data?.url) return window.location.href = data?.url
+   if(data?.url) return window.open(data?.url,"_") 
    console.log("failed url ",data)
   }
   return (
