@@ -21,9 +21,9 @@ const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection
 
                     <div className="flex flex-col items-start gap-3 justify-between">
                       <div className="w-full flex items-center gap-1">
-                        <div className="w-12 h-12 flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 flex items-center justify-center shrink-0" onClick={()=>handlePreviewFile(item)}>
                           {item.type === "folder" ? 
-                         <span className='block p-2 bg-blue-50 text-blue-800 rounded-sm' onClick={()=>handlePreviewFile(item)}>
+                         <span className='block p-2 bg-blue-50 text-blue-800 rounded-sm' >
                            <FileText className='w-5 h-5'/>
                           </span>
                            :
