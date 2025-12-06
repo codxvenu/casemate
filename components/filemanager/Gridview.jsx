@@ -1,8 +1,13 @@
+import { FileService } from '@/hook/apifetch';
 import { EllipsisVertical, FileText } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react'
 
 const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection,handlePathSystem}) => {
+ async function handlePreviewFile(item){
+    const filePath = item.path+item.filename
+    await FileService.getFilePreview(filePath.slice(1,))
+  }
   return (
     <div className="grid max-[440px]:grid-cols-1 max-[768px]:grid-cols-2  min-[768px]:grid-cols-[repeat(auto-fit,minmax(170px,218px))] gap-4 h-max p-1 max-[768px]:pb-3" >
                 {files.sort((a,b)=>new Date(a.created_at) - new Date(b.created_at)).map((item,index) => (
@@ -16,7 +21,7 @@ const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection
                       <div className="w-full flex items-center gap-1">
                         <div className="w-12 h-12 flex items-center justify-center shrink-0">
                           {item.type === "folder" ? 
-                         <span className='block p-2 bg-blue-50 text-blue-800 rounded-sm'>
+                         <span className='block p-2 bg-blue-50 text-blue-800 rounded-sm' onClick={()=>handlePreviewFile(item)}>
                            <FileText className='w-5 h-5'/>
                           </span>
                            :
