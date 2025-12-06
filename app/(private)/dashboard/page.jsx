@@ -94,10 +94,10 @@ const page = () => {
                   handleRequest={handleRequest}
                   chatRequests={Dashboard?.chatRequests}
                 />
-                <QuickReminder
+                {/* <QuickReminder
                   notices={Dashboard.notice}
                   setReminder={setReminder}
-                />
+                /> */}
               </div>
             </div>
           </div>

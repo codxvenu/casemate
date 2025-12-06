@@ -1,11 +1,23 @@
 import React from 'react'
 import { inter } from '@/app/layout'
 import { ConvertMDY, ConvertTime } from '@/utility/lib/date'
-import { Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 const Notices = ({notices,setReminder}) => {
   return (
       <div className="col-span-4 p-2 m-2  h-full">
-          <h2 className="font-semibold mb-3 flex items-center justify-between">Notices & Reminder <Plus className="w-5 h-5 text-blue-600" onClick={()=>setReminder("reminder")}/></h2>
+        <span className='flex items-center justify-between w-full'>
+ <h2 className="font-semibold mb-3 flex items-center justify-start gap-6">All Reminder 
+            <button className='px-2 py-1 bg-blue-600 flex items-center text-white font-normal text-xs rounded-md shadow-sm' onClick={()=>setReminder("reminder")}>  <Plus className="w-4 h-4 text-white" /> Add Reminder</button>
+            
+
+            </h2>
+       <span className="flex items-center gap-2">
+                <button className="p-1 rounded-md shadow-sm bg-[var(--foreground)] group hover:bg-blue-600 transition-all duration-200 ease-in-out"><ChevronLeft className="w-4 h-4 group-hover:text-white"/></button>
+                <button className="p-1 rounded-md shadow-sm bg-[var(--foreground)] group hover:bg-blue-600 transition-all duration-200 ease-in-out"><ChevronRight className="w-4 h-4 group-hover:text-white" /></button>
+                
+                </span>
+        </span>
+         
           <div className="overflow-x-scroll max-[768px]:w-screen w-full" style={{scrollbarWidth : "none"}}>
           <ul className="flex gap-2 w-max pr-9">
             {!!notices?.length && notices?.map((n,index)=>(

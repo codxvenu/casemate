@@ -30,7 +30,8 @@ const SideBar = ({iconOnly,setIconOnly,showBar,setShowBar,atab=0,setChatID,searc
 
       </span>
       <button ref={ref} className='[.iconOnly_&]:hidden p-2  shadow rounded-md text-[var(--text)] font-normal bg-[var(--fileBox)]' onClick={()=>ChangeTheme(ref)}>
-       {theme ==="dark" ?  <Sun className='w-5 h-5' /> : <Moon className='w-5 h-5' />}
+       {/* {theme ==="dark" ?  <Sun className='w-5 h-5' /> : <Moon className='w-5 h-5' />} */}
+       <Share className='w-4.5 h-4.5 group-[.iconOnly]:rotate-[90deg] rotate-[270deg] transition-all duration-300 ease-in-out'/>
       </button>
         </div>
       <div className='p-2 overflow-hidden'>

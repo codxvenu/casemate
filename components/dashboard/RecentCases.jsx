@@ -2,14 +2,15 @@ import React from 'react'
 import { DoorOpen,Trash2,ChevronLeft,ChevronRight } from 'lucide-react'
 const RecentCases = ({history}) => {
   return (
-      <div className="px-2 col-span-3 row-span-2 h-[100%] rounded  grid grid-rows-10" >
-              <h2 className="px-2 pb-3 flex justify-between">Recent Cases <span className="flex items-center gap-2">
+      <div className="px-2 col-span-3 row-span-2 h-[100%] rounded  grid grid-rows-10 " >
+              <h2 className="px-2 pb-3 flex justify-between">Recent Cases 
+                <span className="flex items-center gap-2">
                 <button className="p-1 rounded-md shadow-sm bg-[var(--foreground)] group hover:bg-blue-600 transition-all duration-200 ease-in-out"><ChevronLeft className="w-4 h-4 group-hover:text-white"/></button>
                 <button className="p-1 rounded-md shadow-sm bg-[var(--foreground)] group hover:bg-blue-600 transition-all duration-200 ease-in-out"><ChevronRight className="w-4 h-4 group-hover:text-white" /></button>
                 
                 </span>
               </h2>           
-    <div className="overflow-x-scroll w-full h-full row-span-10"style={{scrollbarWidth : "none"}}>
+    <div className="overflow-x-scroll w-full h-full row-span-10 "style={{scrollbarWidth : "none"}}>
               <table className="bg-[var(--foreground)] !w-max min-w-full shadow-sm h-full ">
                 <thead>
                   <tr>

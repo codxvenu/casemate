@@ -34,6 +34,7 @@ import DeleteD from '@/components/dialoge/DeleteD'
 import { handleCopyClipBoard } from '@/utility/lib/Copy'
 import ShareD from '@/components/dialoge/ShareD'
 import { handleSize } from '@/utility/lib/files'
+import Gridview from '@/components/filemanager/Gridview'
 const page = () => {
     const {user} = useContext(User);
     const [upload,setUpload] = useState(null);
@@ -137,20 +138,21 @@ const page = () => {
     }
    
     function handleFileType(type){
-      switch (type) {
-        case "pdf":
+      switch (type.split(".")[1]) {
+        case "jpg":
           return "/pdf.png"
 
         case "folder":
           return "/folder.svg"
           
-        case "docx":
+        case "png":
           return "/docx.svg"
           
-        case "xsl":
+        case "svg":
           return "/xsl.svg"
         default:
-          return <FileQuestionMark className='w-10 h-10 p-2.5 text-[var(--text)] bg-[var(--fileBox)] rounded-xl'/>
+          return "loda"
+          // <FileQuestionMark className='w-10 h-10 p-2.5 text-[var(--text)] bg-[var(--fileBox)] rounded-xl'/>
           
       }
     }
@@ -230,12 +232,12 @@ useEffect(()=>{
     <Header setShowBar={setShowBar}/>
 
         {/* Main Area */}
-        <main className="flex flex-col p-2 min-[440px]:p-6 w-full">
+        <main className="flex flex-col p-2 min-[768px]:p-6 w-full">
 
           {/* Topbar: Search + actions */}
-          <div className="flex max-[600px]:gap-3 max-[600px]:flex-col max-[600px]:items-end items-center justify-between min-[600px]:mb-6 max-[600px]:mb-3">
-            <div className="flex items-center gap-4 w-1/2">
-              <div className="flex items-center gap-3 bg-white border border-gray-200 px-3 py-3 rounded-lg shadow-sm w-full">
+          <div className="flex max-[600px]:gap-3 max-[600px]:flex-col max-[600px]:items-end items-center justify-between min-[768px]:mb-6 max-[768px]:mb-3">
+            <div className="flex items-center gap-4  w-full">
+              <div className="flex items-center gap-3 bg-white border border-gray-200 px-3 py-3 rounded-lg shadow-sm w-full max-[680px]:w-full">
                 <Search className='w-4 h-4 aspect-auto'/>
                  <input className="outline-none w-full text-sm" placeholder="Search files and folders..." />
               </div>
@@ -255,8 +257,8 @@ useEffect(()=>{
               <button className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:opacity-95" onClick={()=>setUploadShow((prev)=>!prev)}>Upload</button>
             </div>
           </div>
-          <div className="flex min-[680px]:mb-1 w-full min-[625px]:flex-row flex-col items-center justify-between ">
-             <div className="flex items-center gap-3 text-sm text-[var(--fileText)] p-1 px-4 mb-2 bg-white rounded-sm shadow-sm min-[625px]:w-1/2">
+          <div className="flex  w-full min-[625px]:flex-row flex-col items-center justify-between relative">
+             <div className="flex items-center gap-3 text-sm text-[var(--fileText)] p-1 px-4 mb-0 bg-white rounded-b-none rounded-t-md shadow-sm w-full">
             <button className='hover:bg-gray-100 p-2 rounded-md flex gap-2 w-28 items-center ' onClick={()=>{setFiles([...allFiles]); setUpath([]); }}>
              <Home className='w-4 h-4 shrink-0'/>
              <div className='truncate'>{user?.email}</div>
@@ -271,7 +273,7 @@ useEffect(()=>{
           
             </div>
   {!!selectedFiles.length &&        
-     <div className='flex gap-2  p-1 bg-[var(--foreground)] items-center rounded-3xl shadow-sm w-fit max-[680px]:mx-auto'>
+     <div className='flex min-[822px]:gap-2 min-[780px]:max-[822px]:gap-1 p-1  items-center max-[780px]:justify-evenly max-[660px]:w-full max-[660px]:mb-3 w-fit max-[680px]:mx-auto absolute top-1 right-0'>
         {actions.map((a)=>(
           <Fragment key={a.name}>
         <button  className='p-2 hover:bg-[var(--fileBox)] rounded-full relative group' onClick={a.fn}>
@@ -290,47 +292,11 @@ useEffect(()=>{
          
 
           {/* Content area */}
-          <div className="bg-white border h-full border-gray-100 p-4 rounded-lg shadow-sm overflow-y-scroll" style={{scrollbarWidth : "none"}}>
+          <div className="bg-white border h-full border-gray-100 max-[680px]:p-1.5  min-[680px]:p-4 rounded-t-none rounded-lg shadow-sm overflow-y-scroll" style={{scrollbarWidth : "none"}}>
             
-            <div className='w-full max-[600px]:h-[60vh] h-max'>
+            <div className='w-full max-[600px]:h-[60vh] max-[768px]:h-[70vh]'>
             {view === 'grid' ? (
-              <div className="grid min-[440px]:grid-cols-[repeat(auto-fit,minmax(170px,215px))] gap-4 h-full p-1" >
-                {files.sort((a,b)=>new Date(a.created_at) - new Date(b.created_at)).map((item,index) => (
-                  <div key={index} className={`relative p-3 rounded-lg border aspect-auto min-[440px]:aspect-video shadow-sm  ${selectedFiles.some((i)=>i.filename === item.filename) ? 'border-blue-300 shadow-md' : 'border-transparent'} hover:border-gray-200 bg-white max-w-fit`} onClick={()=>handlePathSystem(item)}>
-
-                    {/* <button onClick={() => handleSelection(item)} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
-                     
-                    </button> */}
-
-                    <div className="flex flex-col items-start gap-3 justify-between">
-                      <div className="w-full flex items-center gap-3">
-                        <div className="w-12 h-12 flex items-center justify-center shrink-0">
-                          {item.type !== "folder" ? 
-                         <span className='block p-2 bg-blue-50 text-blue-800 rounded-sm'>
-                           <FileText className='w-5 h-5'/>
-                          </span>
-                           :
-                           <Image src={`${handleFileType(item.type)}`} alt='name' width={40} height={40}/>
-                          }
-                        </div>
-
-                        <div className="flex-1">
-                          <div className="font-medium text-sm truncate whitespace-nowrap overflow-hidden text-ellipsis w-32 capitalize">{item.filename}</div>
-                          <div className="text-xs text-gray-400 truncate uppercase">{item.type}</div>
-                        </div>
-                      </div>
-
-                      <div className="w-full flex items-center justify-between text-xs text-gray-500">
-                        <div className={`${item.type === "folder" && "opacity-0"}`}>{handleSize(item.size)}</div>
-                        <div className="relative">
-                          <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"  onClick={(e)=>{e.preventDefault(); handleSelection(item)}}>
-                            <EllipsisVertical className='w-4 h-4'/> </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Gridview files = {files} selectedFiles={selectedFiles} handleFileType={handleFileType} handleSize={handleSize} handleSelection={handleSelection} handlePathSystem={handlePathSystem} />
             ) : (
               <div className="flex flex-col" >
                 <div className="grid grid-cols-12 gap-4 border-b border-gray-100 pb-2 text-xs text-gray-500">
@@ -339,18 +305,24 @@ useEffect(()=>{
                   <div className="col-span-2">Size</div>
                   <div className="col-span-1">Access</div></div>
 
-                {folders.map((item,index) => (
+                {files.map((item,index) => (
                   <div key={index} className={`grid grid-cols-12 gap-4 items-center py-3 hover:bg-gray-50 rounded-md ${!!selectedFiles.some(i=>i.includes(item.name)) ? 'bg-blue-50' : ''}`} onClick={()=>handleSelection(item)}>
                     <div className="col-span-6 flex items-center gap-3">
                       <div className="w-10 h-10 flex items-center justify-center shrink-0">
-                       <Image src={`${handleFileType(item.type)}`} alt='name' width={40} height={40}/>
+                       {item.type === "folder" ? 
+                                           
+                                                 <FileText className='w-5 h-5'/>
+                                              
+                                                 : 
+                                                 <Image src={`${handleFileType(item.type)}`} alt='name' width={20} height={20}/>
+                                                }
                       </div> 
-                        <h3 className="font-medium text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis">{item.name}</h3>
+                        <h3 className="font-medium text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis capitalize">{item.filename.split(".")[0]}</h3>
                         
                     </div>
 
                     <div className="col-span-3 text-sm text-gray-600">{item.type}</div>
-                    <div className="col-span-2 text-sm text-gray-600">{item.totalSize}</div>
+                    <div className="col-span-2 text-sm text-gray-600">{handleSize(item.size)}</div>
 
                     <div className="col-span-1 flex justify-between items-center">
                       <Image src={`${user.avatar}`} width={25} height={25} className='rounded-full' alt='folder'/>

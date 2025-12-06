@@ -7,7 +7,7 @@ const RenameD = ({handleRename,oldname,setRenameShow,loading}) => {
   return (
      <>
        <div className='fixed backdrop-blur-[2px] bg-[rgba(0,0,0,.7)] inset-0  w-screen h-screen ' onClick={()=>setRenameShow(false)}></div> 
-      <div className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col justify-between items-start z-[100000] aspect-auto w-[450px] bg-white text-text p-4 rounded-md gap-2 shadow-md'>
+      <div className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col justify-between items-start z-[100000] aspect-auto min-[460px]:w-[450px] max-[460px]:w-[95vw] bg-white text-text p-4 rounded-md gap-2 shadow-md'>
         <span className='flex items-center justify-start gap-2 pb-2 relative w-full border-b-2 border-gray-100'>
        <span className='flex p-2 shadow-sm rounded-md'>
         <FilePen className='w-5 h-5 text-blue-600'/>

@@ -104,6 +104,8 @@ function UFiles(key, file) {
     );
   }
   return (
+    <>
+     <div className='fixed backdrop-blur-[2px] bg-[rgba(0,0,0,.7)] inset-0  w-screen h-screen z-[100000]' onClick={()=>setUploadShow(false)}></div> 
     <div
       onDrop={(e) => {
         e.preventDefault();
@@ -119,7 +121,7 @@ function UFiles(key, file) {
         console.log("dragover");
         setDragging(false);
       }}
-      className={`fixed top-0 backdrop-blur-[2px] w-full left-0 h-screen flex flex-col items-center justify-center bg-[rgba(0,0,0,0.4)]`}
+      className={`fixed top-1/2 -translate-1/2  w-full left-1/2 h-fit flex flex-col items-center justify-center z-[1000000]`}
     >
       <div className="p-4 bg-white rounded-md">
         <h2 className="font-medium">File Upload</h2>
@@ -167,6 +169,7 @@ function UFiles(key, file) {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
