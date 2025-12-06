@@ -6,6 +6,8 @@ import React from 'react'
 const Gridview = ({files,selectedFiles,handleFileType,handleSize,handleSelection,handlePathSystem}) => {
  async function handlePreviewFile(item){
     const filePath = item.path+item.filename
+    console.log(filePath,"filePath");
+    
     await FileService.getFilePreview(filePath.slice(1,))
   }
   return (
